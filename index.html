@@ -3,2064 +3,900 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Virtusa AI Assurance — Campaign MVP Interactive Preview</title>
+<title>Virtusa Helio assure — MVP Campaign Interactive v3</title>
 <style>
   :root {
     --navy: #1F3A68;
-    --navy-700: #2A4B80;
-    --navy-50: #EEF2F8;
+    --navy-2: #2F4F82;
     --green: #2E7D32;
-    --green-50: #E7F2E5;
     --amber: #A67C00;
-    --amber-50: #FFF6D6;
     --red: #B23A3A;
-    --red-50: #FDE7E7;
     --blue: #1976D2;
-    --blue-50: #E3F0FB;
-    --text: #1B2330;
-    --muted: #5A6B80;
-    --line: #E1E6EE;
-    --bg: #F5F7FA;
+    --bg: #F6F7F9;
     --card: #FFFFFF;
-    --shadow: 0 1px 3px rgba(31,58,104,0.06), 0 4px 14px rgba(31,58,104,0.06);
+    --muted: #5A6B80;
+    --light-grey: #EDEFF3;
+    --h-shade: #E7F2E5;
+    --m-shade: #FFF6D6;
+    --l-shade: #FDE7E7;
+    --blue-shade: #E0E9FF;
+    --amber-shade: #F4E9D6;
+    --border: #DCE0E8;
+    --ph-bg: #F7F9FC;
+    --ph-border: #B8C2D1;
   }
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
-    font-size: 14.5px;
-    line-height: 1.5;
+    color: #1a1a1a;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
   }
-  header.app-header {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-700) 100%);
-    color: #fff;
-    padding: 22px 32px 18px;
+  header.site {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff; padding: 20px 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
   }
-  .brand {
-    font-size: 11px;
-    letter-spacing: 2.2px;
-    color: #A6C2EA;
-    font-weight: 700;
-    margin-bottom: 6px;
+  header.site .eyebrow { font-size: 11px; letter-spacing: 1.8px; opacity: 0.85; text-transform: uppercase; }
+  header.site h1 { margin: 4px 0 2px; font-size: 22px; font-weight: 700; }
+  header.site .sub { font-size: 12.5px; opacity: 0.85; }
+
+  .kpi-strip {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    background: var(--border); border-bottom: 1px solid var(--border);
   }
-  header h1 {
-    margin: 0 0 4px 0;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-  }
-  header .sub {
-    margin: 0;
-    color: #C9D5EA;
-    font-size: 13px;
-    font-weight: 400;
-  }
-  .kpi-bar {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1px;
-    background: var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .kpi {
-    background: #fff;
-    padding: 14px 20px;
-    text-align: left;
-  }
-  .kpi .num {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--navy);
-    display: block;
-  }
-  .kpi .lbl {
-    font-size: 11.5px;
-    color: var(--muted);
-    letter-spacing: 0.2px;
-  }
+  .kpi { background: var(--card); padding: 14px 16px; }
+  .kpi .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi .val { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .kpi .v2 { font-size: 11px; color: var(--muted); }
+
   nav.tabs {
-    display: flex;
-    gap: 0;
-    padding: 0 32px;
-    background: #fff;
-    border-bottom: 1px solid var(--line);
+    display: flex; background: var(--card); border-bottom: 1px solid var(--border);
     overflow-x: auto;
   }
   nav.tabs button {
-    background: transparent;
-    border: none;
-    padding: 14px 20px;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    font-family: inherit;
-    white-space: nowrap;
-    transition: color .15s, border-color .15s;
+    background: transparent; border: none; padding: 14px 18px; font-size: 13.5px;
+    color: var(--muted); font-weight: 500; cursor: pointer; white-space: nowrap;
+    border-bottom: 3px solid transparent;
   }
+  nav.tabs button.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
   nav.tabs button:hover { color: var(--navy); }
-  nav.tabs button.active {
-    color: var(--navy);
-    border-bottom-color: var(--navy);
-    font-weight: 600;
-  }
-  main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 28px 32px 60px;
-  }
+
+  main { padding: 24px 28px 48px; max-width: 1400px; margin: 0 auto; }
   .panel { display: none; }
-  .panel.active { display: block; animation: fade .22s ease; }
-  @keyframes fade { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: none;} }
+  .panel.active { display: block; }
 
-  h2.sec {
-    margin: 0 0 6px 0;
-    font-size: 20px;
-    color: var(--navy);
-    font-weight: 600;
-    letter-spacing: -0.2px;
-  }
-  .sec-sub {
-    color: var(--muted);
-    margin: 0 0 22px 0;
-    font-size: 13.5px;
-    max-width: 900px;
-  }
-
-  /* Cards */
   .card {
-    background: var(--card);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 20px 22px;
-    border: 1px solid var(--line);
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
   }
-  .card h3 {
-    margin: 0 0 10px 0;
-    font-size: 15px;
-    color: var(--navy);
-    font-weight: 600;
-  }
-  .card h3 .badge {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    background: var(--navy-50);
-    color: var(--navy);
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    vertical-align: middle;
-    margin-left: 6px;
-  }
-  .badge.new { background: var(--green-50); color: var(--green); }
-  .badge.existing { background: var(--amber-50); color: var(--amber); }
-  .badge.fastpath { background: var(--blue-50); color: var(--blue); }
+  .card h2 { color: var(--navy); font-size: 16px; margin: 0 0 12px; letter-spacing: 0.2px; }
+  .card h3 { color: var(--navy); font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.8px; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .row { display: grid; gap: 16px; }
+  .row.g2 { grid-template-columns: 1fr 1fr; }
+  .row.g3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 
-  /* Overview */
-  .scope {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-bottom: 26px;
-  }
-  .scope .in,
-  .scope .out {
-    padding: 18px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.55;
-  }
-  .scope .in {
-    background: var(--green-50);
-    border-left: 3px solid var(--green);
-  }
-  .scope .out {
-    background: var(--red-50);
-    border-left: 3px solid var(--red);
-  }
-  .scope h4 {
-    margin: 0 0 8px 0;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1.1px;
-  }
-  .scope .in h4 { color: var(--green); }
-  .scope .out h4 { color: var(--red); }
-  .scope ul { margin: 0; padding-left: 18px; }
-  .scope li { margin-bottom: 3px; }
-
-  .asset-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 26px;
-  }
-  .asset-mini {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-size: 13px;
-  }
-  .asset-mini .tag {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .asset-mini .title {
-    font-weight: 600;
-    color: var(--navy);
-    display: block;
-    margin: 4px 0 2px;
-  }
-  .asset-mini .meta {
-    font-size: 11.5px;
-    color: var(--muted);
-  }
-
-  /* Timeline */
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 2px;
-    margin-top: 10px;
-  }
-  .tl-week {
-    background: #fff;
-    border: 1px solid var(--line);
-    padding: 12px 10px;
-    font-size: 11.5px;
-    min-height: 110px;
-  }
-  .tl-week .w {
-    font-weight: 700;
-    color: var(--navy);
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    display: block;
-    margin-bottom: 4px;
-  }
-  .tl-week .focus {
+  /* ----- Placeholder (finished content preview) ----- */
+  .placeholder {
+    background: var(--ph-bg);
+    border: 1.5px dashed var(--ph-border);
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
     color: var(--muted);
     font-size: 11px;
-    display: block;
-    margin-bottom: 6px;
-    min-height: 28px;
-  }
-  .tl-week ul { margin: 0; padding-left: 14px; }
-  .tl-week li { font-size: 10.5px; margin-bottom: 2px; }
-  .tl-week.hinge { background: var(--blue-50); border-color: var(--blue); }
-
-  /* Journey funnel */
-  .journey-controls {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-  }
-  .toggle-group {
-    display: inline-flex;
-    background: #fff;
-    border-radius: 6px;
-    border: 1px solid var(--line);
-    overflow: hidden;
-  }
-  .toggle-group button {
-    background: transparent;
-    border: none;
-    padding: 8px 14px;
-    font-size: 12.5px;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .toggle-group button.active {
-    background: var(--navy);
-    color: #fff;
-  }
-  .funnel {
-    display: grid;
-    grid-template-columns: 180px 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 22px;
-  }
-  .stage-label {
-    background: var(--navy);
-    color: #fff;
-    padding: 12px 14px;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 600;
-  }
-  .stage-label .timing {
-    display: block;
-    font-size: 10.5px;
-    font-weight: 400;
-    opacity: 0.7;
-    margin-top: 2px;
-  }
-  .stage-cell {
-    padding: 12px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: transform .12s;
-    border: 1px solid transparent;
-  }
-  .stage-cell:hover {
-    transform: translateY(-1px);
-    border-color: var(--navy);
-  }
-  .cell-h { background: var(--green-50); border-left: 3px solid var(--green); }
-  .cell-m { background: var(--amber-50); border-left: 3px solid var(--amber); }
-  .cell-l { background: var(--red-50); border-left: 3px solid var(--red); }
-  .stage-cell ul { margin: 4px 0 0 0; padding-left: 16px; }
-  .stage-cell li { margin-bottom: 2px; font-size: 11.5px; }
-  .stage-hinge { background: var(--blue-50); border: 1px dashed var(--blue); text-align: center; padding: 16px; grid-column: 2 / span 3; color: var(--navy); font-weight: 600; }
-
-  .fastpath-overlay {
-    background: linear-gradient(135deg, var(--blue-50) 0%, #f3faff 100%);
-    border: 1px dashed var(--blue);
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin-top: 14px;
-    font-size: 13px;
-  }
-  .fastpath-overlay h4 {
-    margin: 0 0 6px 0;
-    color: var(--blue);
-    font-size: 13px;
-  }
-
-  /* Channel mockups */
-  .channel-nav {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-  }
-  .channel-nav button {
-    background: #fff;
-    border: 1px solid var(--line);
-    padding: 9px 15px;
-    font-size: 12.5px;
-    cursor: pointer;
-    border-radius: 20px;
-    color: var(--muted);
-    font-family: inherit;
-    transition: all .15s;
-  }
-  .channel-nav button.active {
-    background: var(--navy);
-    color: #fff;
-    border-color: var(--navy);
-  }
-  .channel-view { display: none; }
-  .channel-view.active { display: grid; }
-
-  /* Email mock */
-  .email-mock {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .email-head {
-    background: #FAFBFC;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--line);
-    font-size: 12px;
-  }
-  .email-head .from { font-weight: 600; color: var(--text); }
-  .email-head .meta { color: var(--muted); font-size: 11.5px; margin-top: 2px; }
-  .email-head .subject { color: var(--navy); font-weight: 600; margin-top: 6px; font-size: 13.5px; }
-  .email-body {
-    padding: 18px 20px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--text);
-  }
-  .email-body p { margin: 0 0 10px; }
-  .email-cta {
-    display: inline-block;
-    background: var(--navy);
-    color: #fff;
-    padding: 9px 18px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 12.5px;
-    margin-top: 6px;
-  }
-  .email-sig { color: var(--muted); font-size: 12px; margin-top: 12px; }
-
-  /* LinkedIn mock */
-  .li-mock {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    max-width: 440px;
-  }
-  .li-head {
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid var(--line);
-  }
-  .li-avatar {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--navy), var(--navy-700));
-    color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 14px;
-  }
-  .li-head .name { font-weight: 600; font-size: 13.5px; color: var(--text); }
-  .li-head .title-sub { color: var(--muted); font-size: 11.5px; }
-  .li-head .timestamp { color: var(--muted); font-size: 11px; margin-top: 1px; }
-  .li-body {
-    padding: 6px 14px 12px;
-    font-size: 13px;
-    color: var(--text);
-    white-space: pre-line;
-  }
-  .li-image {
-    background: linear-gradient(135deg, #EEF2F8 0%, #D7E3F3 100%);
-    height: 180px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--navy); font-weight: 600; font-size: 15px;
-    padding: 20px; text-align: center;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .li-image.carousel {
-    background: repeating-linear-gradient(90deg, #EEF2F8 0 110px, #D7E3F3 110px 115px, #EEF2F8 115px 225px);
-  }
-  .li-reactions {
-    padding: 10px 14px;
-    font-size: 11.5px;
-    color: var(--muted);
-    border-top: 1px solid var(--line);
-    display: flex; gap: 12px;
-  }
-  .li-sponsored {
-    padding: 6px 14px;
-    font-size: 10.5px;
-    color: var(--muted);
-    background: #FAFBFC;
-    border-bottom: 1px solid var(--line);
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-  }
-
-  /* Landing page mock */
-  .lp-mock {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .lp-nav {
-    background: #fff;
-    padding: 10px 22px;
-    font-size: 12px;
-    border-bottom: 1px solid var(--line);
-    display: flex; gap: 18px; align-items: center;
-  }
-  .lp-nav .logo { font-weight: 700; color: var(--navy); }
-  .lp-nav a { color: var(--muted); text-decoration: none; }
-  .lp-hero {
-    padding: 32px 24px;
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-700) 100%);
-    color: #fff;
-  }
-  .lp-hero h1 {
-    margin: 0 0 10px 0;
-    font-size: 22px;
-    font-weight: 600;
-    max-width: 580px;
-  }
-  .lp-hero p {
-    margin: 0 0 14px 0;
-    font-size: 13.5px;
-    max-width: 560px;
-    color: #C9D5EA;
-  }
-  .lp-cta {
-    display: inline-block;
-    background: #fff;
-    color: var(--navy);
-    padding: 10px 18px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 13px;
-  }
-  .lp-cta.secondary {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    margin-left: 8px;
-  }
-  .lp-body {
-    padding: 22px 24px;
-    font-size: 12.5px;
-    color: var(--text);
-  }
-  .lp-body h3 { margin: 0 0 12px; color: var(--navy); font-size: 14px; }
-  .lp-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .lp-form-field {
-    background: #F5F7FA;
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 11.5px;
-    color: var(--muted);
-  }
-
-  /* Webinar mock */
-  .webinar-mock {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .webinar-hero {
-    aspect-ratio: 16/9;
-    background: linear-gradient(135deg, var(--navy) 0%, var(--green) 100%);
-    color: #fff;
-    padding: 30px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
+    min-height: 90px;
+    line-height: 1.5;
   }
-  .webinar-hero .label {
-    font-size: 11px;
-    letter-spacing: 1.4px;
-    color: #B9E7B2;
-    text-transform: uppercase;
-    font-weight: 600;
+  .placeholder .ph-icon {
+    font-size: 22px; color: var(--ph-border); margin-bottom: 4px;
   }
-  .webinar-hero h2 {
-    margin: 8px 0 12px;
-    font-size: 26px;
-    font-weight: 600;
-    line-height: 1.25;
+  .placeholder .ph-label {
+    font-weight: 700; color: var(--navy); letter-spacing: 0.5px;
+    font-size: 11px; text-transform: uppercase; margin-bottom: 2px;
   }
-  .webinar-hero .detail { font-size: 13.5px; opacity: 0.9; }
-  .webinar-agenda {
-    padding: 18px 22px;
+  .placeholder .ph-sub { font-size: 11px; color: var(--muted); }
+  .placeholder.tall { min-height: 140px; }
+  .placeholder.short { min-height: 60px; }
+
+  /* ----- Scope boxes ----- */
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .scope-box { padding: 14px 16px; border-radius: 6px; border: 1px solid var(--border); }
+  .scope-box.in  { background: #F1F7F0; border-color: #CFE5CD; }
+  .scope-box.out { background: #FCF1F1; border-color: #ECCACA; }
+  .scope-box .hd { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .scope-box.in .hd  { color: var(--green); }
+  .scope-box.out .hd { color: var(--red); }
+  .scope-box ul { margin: 0; padding-left: 18px; font-size: 12.5px; }
+  .scope-box li { margin-bottom: 4px; }
+
+  /* ----- Timeline ----- */
+  .timeline { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+  .tl-week {
+    background: var(--light-grey); padding: 10px 8px; border-radius: 4px; font-size: 11.5px;
+    min-height: 64px;
   }
-  .webinar-agenda h4 { margin: 0 0 10px; color: var(--navy); font-size: 13px; }
-  .agenda-item {
-    display: grid;
-    grid-template-columns: 60px 1fr auto;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 12.5px;
+  .tl-week.hinge { background: #D7E7FB; border: 1px solid var(--blue); }
+  .tl-week .wk { font-weight: 700; color: var(--navy); font-size: 11px; }
+
+  /* ----- Inventory (TOFU/MOFU/BOFU) ----- */
+  .inv-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .inv-col {
+    padding: 12px; border-radius: 6px; border: 1px solid var(--border);
   }
-  .agenda-item:last-child { border-bottom: none; }
-  .agenda-item .t {
-    color: var(--navy); font-weight: 600; font-size: 11.5px;
+  .inv-col.tofu { background: #F0F5FB; border-color: #C4D5EA; }
+  .inv-col.mofu { background: #FFF8E8; border-color: #E8D7A8; }
+  .inv-col.bofu { background: #F0F8EF; border-color: #C4DBC2; }
+  .inv-col .inv-hd {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    margin-bottom: 8px;
   }
-  .agenda-item .s {
-    color: var(--muted); font-size: 11px;
+  .inv-col.tofu .inv-hd { color: var(--blue); }
+  .inv-col.mofu .inv-hd { color: var(--amber); }
+  .inv-col.bofu .inv-hd { color: var(--green); }
+  .inv-col .inv-sub { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; }
+  .inv-item {
+    background: var(--card); padding: 8px 10px; border-radius: 4px; margin-bottom: 6px;
+    font-size: 11.5px; border: 1px solid var(--border);
+  }
+  .inv-item .inv-t { font-weight: 700; color: var(--navy); font-size: 11.5px; }
+  .inv-item .inv-type {
+    display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 1px 6px; border-radius: 2px; background: var(--light-grey); color: var(--navy);
+    margin-right: 5px; text-transform: uppercase;
+  }
+  .inv-item .inv-p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ----- Content Gallery & Asset Library cards ----- */
+  .cg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .cg-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .cg-card .cg-hd { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+  .cg-card .cg-title { font-size: 13px; color: var(--navy); font-weight: 700; margin: 0 0 4px; }
+  .cg-card .cg-gist { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; min-height: 32px; }
+  .cg-card .cg-meta { display: flex; gap: 6px; font-size: 10.5px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+
+  .chip {
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .chip.tofu { background: #E0E9FF; color: var(--navy); }
+  .chip.mofu { background: #FFF6D6; color: var(--amber); }
+  .chip.bofu { background: #D6EDD4; color: var(--green); }
+  .chip.perspective { background: #EDE7F6; color: #5E35B1; }
+  .chip.blog { background: #E3F2FD; color: #1565C0; }
+  .chip.cs { background: #FFF3E0; color: #E65100; }
+  .chip.ebook { background: #E8EAF6; color: var(--navy); }
+  .chip.webinar { background: #D7E7FB; color: var(--navy); }
+  .chip.collateral { background: #F1F8E9; color: #558B2F; }
+  .chip.deck { background: #FCE4EC; color: #AD1457; }
+  .chip.cheat { background: #FFF8E1; color: #8D6E00; }
+  .chip.proof { background: #E0F2F1; color: #00695C; }
+  .chip.workshop { background: #D6EDD4; color: var(--green); }
+
+  /* ----- Group section headers ----- */
+  .group-hd {
+    font-size: 12px; color: var(--navy); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 2px solid var(--navy); padding-bottom: 4px; margin: 18px 0 12px;
   }
 
-  /* Workshop mock */
-  .ws-mock {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 20px 22px;
+  /* ----- Prospect Journey (H/M/L grid) ----- */
+  .journey-toggle { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+  .journey-toggle button {
+    background: var(--card); border: 1px solid var(--border); padding: 6px 12px;
+    border-radius: 5px; font-size: 12px; cursor: pointer;
   }
-  .ws-head {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--navy);
+  .journey-toggle button.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  .journey-grid { display: grid; grid-template-columns: 80px repeat(3, 1fr); gap: 6px; }
+  .jr-col-hd {
+    padding: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    text-align: center; font-weight: 700; border-radius: 4px;
+  }
+  .jr-col-hd.h { background: var(--h-shade); color: var(--green); }
+  .jr-col-hd.m { background: var(--m-shade); color: var(--amber); }
+  .jr-col-hd.l { background: var(--l-shade); color: var(--red); }
+  .jr-row-hd {
+    padding: 10px 6px; background: var(--navy); color: #fff; border-radius: 4px;
+    text-align: center; font-size: 11px; font-weight: 700;
+  }
+  .jr-cell { padding: 10px; font-size: 11.5px; border-radius: 4px; border: 1px solid var(--border); }
+  .jr-cell.h { background: #F2FAF1; }
+  .jr-cell.m { background: #FFFBE8; }
+  .jr-cell.l { background: #FDF0F0; }
+  .jr-cell .t { font-weight: 700; font-size: 11.5px; color: var(--navy); display: block; margin-bottom: 3px; }
+  .jr-cell .assets {
+    margin-top: 4px; font-size: 10.5px; color: var(--muted); font-style: italic;
+  }
+
+  .fp-overlay {
+    margin-top: 18px; padding: 14px; border-radius: 8px; background: #E0E9FF;
+    border: 1px dashed var(--navy); display: none;
+  }
+  .fp-overlay.active { display: block; }
+  .fp-overlay h3 { color: var(--navy); margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .fp-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fp-lane { padding: 10px; border-radius: 6px; background: var(--card); }
+  .fp-lane.a { border-left: 4px solid var(--navy); }
+  .fp-lane.b { border-left: 4px solid var(--green); }
+
+  /* ----- Channel Mix ----- */
+  .ch-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .ch-tabs button {
+    background: var(--card); border: 1px solid var(--border); padding: 8px 14px;
+    border-radius: 5px; font-size: 12.5px; cursor: pointer;
+  }
+  .ch-tabs button.active {
+    background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 600;
+  }
+  .ch-panel { display: none; }
+  .ch-panel.active { display: block; }
+
+  .play-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px; font-size: 12px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .play-card .pc-title { font-weight: 700; color: var(--navy); font-size: 13px; margin: 0; }
+  .play-card .pc-meta {
+    display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 11px; color: var(--muted);
+  }
+  .play-card .pc-meta b { color: var(--navy); font-weight: 600; }
+
+  /* ----- Fast-Path ----- */
+  .trigger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .trigger-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 12px;
+    cursor: pointer; font-size: 12px;
+  }
+  .trigger-card:hover { border-color: var(--navy); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .trigger-card.active { border: 2px solid var(--navy); background: #F0F4FB; }
+  .trigger-card .tr-t { font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 12.5px; }
+  .trigger-card .tr-src { font-size: 11px; color: var(--muted); }
+  .detail-panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px;
     margin-bottom: 14px;
   }
-  .ws-head .title {
-    font-size: 15px; font-weight: 600; color: var(--navy);
-  }
-  .ws-head .sub { font-size: 11.5px; color: var(--muted); }
-  .ws-score {
-    font-size: 36px; font-weight: 700; color: var(--navy);
-    text-align: right; line-height: 1;
-  }
-  .ws-score .max { font-size: 14px; color: var(--muted); font-weight: 500; }
-  .dim-row {
-    display: grid;
-    grid-template-columns: 180px 1fr 60px;
-    gap: 10px; margin: 8px 0;
-    align-items: center;
-  }
-  .dim-row .dn {
-    font-size: 12px; color: var(--text); font-weight: 500;
-  }
-  .dim-bar {
-    height: 10px; background: var(--line); border-radius: 5px; overflow: hidden;
-  }
-  .dim-bar .fill {
-    height: 100%; background: linear-gradient(90deg, var(--amber), var(--green));
-    border-radius: 5px;
-  }
-  .dim-row .dv { text-align: right; font-weight: 600; color: var(--navy); font-size: 12px; }
+  .detail-panel h3 { color: var(--navy); margin: 0 0 8px; font-size: 14px; }
+  .route-flow { display: flex; align-items: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; font-size: 12px; }
+  .route-node { padding: 6px 10px; border-radius: 4px; background: var(--light-grey); font-weight: 600; }
+  .route-node.a { background: #E0E9FF; color: var(--navy); }
+  .route-node.b { background: #D6EDD4; color: var(--green); }
+  .route-arr { color: var(--muted); }
 
-  /* Fast-Path */
-  .fp-layout {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 18px;
-  }
-  .fp-triggers {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .fp-trigger {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    font-size: 12.5px;
-    transition: background .15s;
-  }
-  .fp-trigger:hover { background: var(--navy-50); }
-  .fp-trigger.active { background: var(--navy-50); border-left: 3px solid var(--navy); padding-left: 13px; }
-  .fp-trigger:last-child { border-bottom: none; }
-  .fp-trigger .head { font-weight: 600; color: var(--navy); font-size: 13px; }
-  .fp-trigger .src { color: var(--muted); font-size: 11.5px; margin-top: 3px; }
+  .sla-ladder { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 12px; margin-top: 8px; }
+  .sla-step { background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 5px; }
+  .sla-step .sla-t { font-weight: 600; color: var(--navy); font-size: 11.5px; margin-bottom: 3px; }
+  .sla-step .sla-v { font-size: 11px; color: var(--muted); }
 
-  .fp-detail {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-  }
-  .fp-detail h3 {
-    margin: 0 0 4px; font-size: 16px; color: var(--navy);
-  }
-  .fp-detail .lane {
-    display: inline-block; padding: 3px 10px; border-radius: 10px;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
-    margin-bottom: 14px; text-transform: uppercase;
-  }
-  .lane-a { background: var(--blue-50); color: var(--blue); }
-  .lane-b { background: var(--green-50); color: var(--green); }
-  .lane-overflow { background: var(--amber-50); color: var(--amber); }
-
-  .sla-ladder {
-    list-style: none; padding: 0; margin: 18px 0 0 0;
-  }
-  .sla-step {
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 14px;
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--line);
-  }
-  .sla-step:last-child { border-bottom: none; }
-  .sla-step .when { color: var(--green); font-weight: 700; font-size: 12.5px; }
-  .sla-step .what { font-size: 12.5px; }
-  .sla-step .what b { color: var(--navy); }
-
-  .guardrails {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
-  }
+  .guardrails { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px; }
   .guard {
-    background: var(--navy-50);
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    border-left: 3px solid var(--navy);
+    background: #FFF6E0; border-left: 3px solid var(--amber); padding: 10px 12px; font-size: 11.5px;
+    border-radius: 3px;
   }
-  .guard b { color: var(--navy); }
+  .guard b { color: var(--amber); font-weight: 700; }
 
-  /* Predict */
-  .predict-layout {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 22px;
+  /* ----- Predict ----- */
+  .predict-grid { display: grid; grid-template-columns: 2fr 3fr; gap: 18px; }
+  .sliders .slider-row {
+    display: grid; grid-template-columns: 1fr 70px; gap: 10px; align-items: center;
+    padding: 8px 0; font-size: 12.5px; border-bottom: 1px solid var(--border);
   }
-  .pred-controls {
-    background: #fff;
-    padding: 20px 22px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    box-shadow: var(--shadow);
-  }
-  .slider-row {
-    margin-bottom: 18px;
-  }
-  .slider-row label {
-    display: flex; justify-content: space-between;
-    font-size: 12.5px; color: var(--text);
-    margin-bottom: 6px;
-  }
-  .slider-row label b { color: var(--navy); }
-  .slider-row input[type=range] {
-    width: 100%; appearance: none; height: 6px;
-    background: var(--line); border-radius: 3px; outline: none;
-  }
-  .slider-row input[type=range]::-webkit-slider-thumb {
-    appearance: none; width: 16px; height: 16px;
-    background: var(--navy); border-radius: 50%; cursor: pointer;
-    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(31,58,104,0.3);
-  }
-  .slider-row input[type=range]::-moz-range-thumb {
-    width: 16px; height: 16px;
-    background: var(--navy); border-radius: 50%; cursor: pointer;
-    border: 2px solid #fff;
-  }
-  .slider-hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .sliders .slider-row .lbl { font-weight: 600; color: var(--navy); }
+  .sliders .slider-row .hint { font-size: 11px; color: var(--muted); }
+  .sliders input[type="range"] { width: 100%; }
+  .sliders .val { text-align: right; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
 
-  .pred-results {
-    background: #fff;
-    padding: 22px 24px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    box-shadow: var(--shadow);
+  .pred-funnel .pred-stage {
+    display: grid; grid-template-columns: 180px 1fr 80px; gap: 10px; align-items: center;
+    padding: 6px 0; font-size: 12px;
   }
-  .pred-results h3 { margin: 0 0 14px; font-size: 14px; color: var(--navy); }
-  .pred-funnel {
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .pred-stage {
-    display: grid;
-    grid-template-columns: 210px 1fr 80px;
-    gap: 12px;
-    align-items: center;
-    padding: 8px 0;
-  }
-  .pred-stage .nm { font-size: 12.5px; color: var(--text); font-weight: 500; }
-  .pred-bar {
-    height: 22px; background: var(--line); border-radius: 3px; overflow: hidden;
-    position: relative;
-  }
-  .pred-bar .bf {
-    height: 100%; border-radius: 3px;
-    background: linear-gradient(90deg, var(--navy) 0%, var(--green) 100%);
-    transition: width .3s ease;
-  }
-  .pred-bar.fastpath .bf {
-    background: linear-gradient(90deg, var(--blue) 0%, #0D47A1 100%);
-  }
-  .pred-stage .pv {
-    text-align: right; font-weight: 700; color: var(--navy); font-size: 14px;
-  }
-  .pred-summary {
-    margin-top: 20px;
-    background: var(--navy-50);
-    padding: 14px 16px;
-    border-radius: 6px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
+  .pred-funnel .pred-stage .nm { color: var(--navy); font-weight: 600; }
+  .pred-bar { background: var(--light-grey); height: 22px; border-radius: 3px; overflow: hidden; }
+  .pred-bar .bf { background: var(--navy); height: 100%; transition: width 0.3s; }
+  .pred-bar.fastpath .bf { background: var(--green); }
+  .pred-funnel .pv { text-align: right; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+
+  .summary-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .sk-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px;
     text-align: center;
   }
-  .pred-summary .lb { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 600; }
-  .pred-summary .vl { font-size: 22px; color: var(--navy); font-weight: 700; margin-top: 2px; }
-  .pred-summary .tag { font-size: 11px; color: var(--muted); }
+  .sk-card .sk-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+  .sk-card .sk-v { font-size: 28px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .sk-card.green .sk-v { color: var(--green); }
 
-  /* Asset library */
-  .al-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-  .al-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .al-head {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--line);
-    background: #FAFBFC;
-  }
-  .al-head .tag {
-    font-size: 10px; letter-spacing: 1px; color: var(--muted);
-    font-weight: 600; text-transform: uppercase;
-  }
-  .al-head .title {
-    color: var(--navy); font-weight: 600; font-size: 14.5px;
-    margin-top: 2px;
-  }
-  .al-head .sub {
-    color: var(--muted); font-size: 11.5px; margin-top: 2px;
-  }
-  .al-preview {
-    padding: 16px 18px;
-    font-size: 12.5px;
-    color: var(--text);
-    background: #fff;
-    min-height: 130px;
-  }
-  .al-preview .caption {
-    color: var(--muted); font-style: italic; font-size: 11.5px; margin-top: 8px;
-  }
-  .al-body { padding: 0; }
-
-  footer.app-footer {
-    text-align: center;
-    padding: 22px;
-    color: var(--muted);
-    font-size: 11.5px;
-    border-top: 1px solid var(--line);
-    background: #fff;
-  }
-
-  .hrule {
-    border: 0; border-top: 1px solid var(--line); margin: 26px 0;
-  }
-  .note {
-    background: #FFFAE6;
-    border-left: 3px solid var(--amber);
-    padding: 12px 16px;
-    border-radius: 4px;
-    font-size: 12.5px;
-    color: var(--text);
-    margin-bottom: 20px;
-  }
-
+  footer { padding: 16px 28px; text-align: center; font-size: 11px; color: var(--muted); }
 </style>
 </head>
 <body>
 
-<header class="app-header">
-  <div class="brand">VIRTUSA DIGITAL ASSURANCE</div>
-  <h1>Campaign MVP — Interactive Preview</h1>
-  <p class="sub">AI Model Trust, Assurance &amp; Governance  ·  Powered by Helio assure</p>
+<header class="site">
+  <div class="eyebrow">Virtusa Digital Assurance — MVP Interactive v3</div>
+  <h1>AI Model Trust, Assurance &amp; Governance (PC-02-003) · powered by Helio assure</h1>
+  <div class="sub">ABM-Only · Healthcare + BFSI · Hand-Raiser Fast-Paths Retained · Content placeholders for finished previews</div>
 </header>
 
-<div class="kpi-bar">
-  <div class="kpi">
-    <span class="num">50</span>
-    <span class="lbl">Tier-1 Target Accounts (ABM)</span>
-  </div>
-  <div class="kpi">
-    <span class="num">2</span>
-    <span class="lbl">Hero Industries: Healthcare Payer · BFSI</span>
-  </div>
-  <div class="kpi">
-    <span class="num">8 wk</span>
-    <span class="lbl">Wave 1 · live webinar at Week 6</span>
-  </div>
-  <div class="kpi">
-    <span class="num">10</span>
-    <span class="lbl">Net-new content assets + sales kit</span>
-  </div>
-  <div class="kpi">
-    <span class="num">2</span>
-    <span class="lbl">Hand-Raiser Fast-Path Lanes</span>
-  </div>
+<div class="kpi-strip">
+  <div class="kpi"><div class="lbl">Target Account List</div><div class="val">50+100</div><div class="v2">Tier-1 + Tier-2</div></div>
+  <div class="kpi"><div class="lbl">Industries</div><div class="val">2</div><div class="v2">Healthcare · BFSI</div></div>
+  <div class="kpi"><div class="lbl">Launch Window</div><div class="val">8 wk</div><div class="v2">Live Webinar Wk 6</div></div>
+  <div class="kpi"><div class="lbl">Assets in MVP</div><div class="val">13</div><div class="v2">Short + Long + Sales</div></div>
+  <div class="kpi"><div class="lbl">Fast-Path Lanes</div><div class="val">2</div><div class="v2">Webinar · Workshop</div></div>
 </div>
 
-<nav class="tabs">
-  <button class="tab-btn active" data-tab="overview">Overview</button>
-  <button class="tab-btn" data-tab="journey">Journey</button>
-  <button class="tab-btn" data-tab="assets">Asset Library</button>
-  <button class="tab-btn" data-tab="channels">Channel Mix</button>
-  <button class="tab-btn" data-tab="fastpath">Hand-Raiser Fast-Path</button>
-  <button class="tab-btn" data-tab="predict">Predict</button>
+<nav class="tabs" id="tabnav">
+  <button class="active" data-tab="overview">Overview</button>
+  <button data-tab="library">Content &amp; Asset Library</button>
+  <button data-tab="journey">Prospect Journey</button>
+  <button data-tab="channels">Channel Mix</button>
+  <button data-tab="fastpath">Hand-Raiser Fast-Path</button>
+  <button data-tab="predict">Predict</button>
 </nav>
 
 <main>
 
-<!-- =========== OVERVIEW =========== -->
-<section class="panel active" id="overview">
-  <h2 class="sec">MVP Scope at a Glance</h2>
-  <p class="sec-sub">ABM-led program targeting 50 Tier-1 named accounts across Healthcare Payer and BFSI. Channels are deliberately narrow (Email · LinkedIn Organic &amp; Paid · Website &amp; Landing Pages · Webinar · Workshop). No net-new-logo demand-gen engine. Culminates in the 1:1 Diagnostic Workshop.</p>
-
-  <div class="scope">
-    <div class="in">
-      <h4>IN SCOPE</h4>
-      <ul>
-        <li>50-account ABM target list (split Healthcare Payer 25 · BFSI 25)</li>
-        <li>1 Perspective + 2 Blogs + 1 Gated Field Guide eBook (synthesis)</li>
-        <li>2 Case Studies (Healthcare native + BFSI analog)</li>
-        <li>4-asset Sales Kit (brochure · business deck · tech deck · objection cheat-sheet)</li>
-        <li>Existing live webinar "From Sandbox to Scale"</li>
-        <li>1:1 Diagnostic Workshop (SA + Client Partner)</li>
-        <li>Hand-raiser fast-path infrastructure (landing page, SA booking, templates)</li>
-        <li>Email · LinkedIn Organic &amp; Paid · Website · Webinar · Workshop</li>
-      </ul>
-    </div>
-    <div class="out">
-      <h4>OUT OF SCOPE FOR MVP</h4>
-      <ul>
-        <li>New-logo demand-gen funnel at scale</li>
-        <li>Life Sciences and Telecom hero industry cuts (deferred to Wave 2)</li>
-        <li>Paid search / Google Display / programmatic</li>
-        <li>3rd-party content syndication</li>
-        <li>Podcast sponsorships / audio-first evergreen</li>
-        <li>Mass field events / conferences (but event hand-offs still feed fast-path)</li>
-        <li>Short-form video engine (beyond webinar clips)</li>
-      </ul>
-    </div>
-  </div>
-
-  <h2 class="sec">Content Library — What We Actually Build</h2>
-  <p class="sec-sub">9 net-new deliverables (plus the 4-asset sales kit as one bundle) + 2 existing anchors. Every atomic LinkedIn / email / landing-page touchpoint is <i>derived</i> from these pillars, not produced as standalone content.</p>
-
-  <div class="asset-grid">
-    <div class="asset-mini">
-      <span class="tag">NEW · LONG-FORM</span>
-      <span class="title">Perspective 1</span>
-      The 5 Dimensions of Enterprise AI Assurance &amp; the Trust Gap
-      <div class="meta">~1800 words · Themes T1 + T4</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · BLOG</span>
-      <span class="title">Blog 1</span>
-      Escaping Pilot Purgatory
-      <div class="meta">~900 words · Theme T2</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · BLOG</span>
-      <span class="title">Blog 2</span>
-      From Manual QA to Autonomous Agentic Assurance
-      <div class="meta">~900 words · Theme T3</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · GATED</span>
-      <span class="title">Field Guide eBook</span>
-      The 2026 AI Assurance Playbook for CXOs
-      <div class="meta">~20 pp synthesis of Perspective + 2 Blogs · lead-capture workhorse</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · CS</span>
-      <span class="title">Case Study — Healthcare Payer</span>
-      Talk2Doc + Appeals (combined proof pack)
-      <div class="meta">Native · 60% faster appeals · $7M saved · GenAI + Voice</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · CS</span>
-      <span class="title">Case Study — BFSI Analog</span>
-      From Theme Park to Trading Floor: 24/7 Expert AI at Scale
-      <div class="meta">Reframed from Theme Park CS · patterns map directly to capital markets</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · SALES KIT</span>
-      <span class="title">Offering Brochure (1-pager)</span>
-      AI Model Trust, Assurance &amp; Governance — PC-02-003
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · SALES KIT</span>
-      <span class="title">Business-Audience Pitch Deck</span>
-      12 slides · CFO / CRO / business-owner narrative
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · SALES KIT</span>
-      <span class="title">Technical-Audience Pitch Deck</span>
-      14 slides · CTO / Chief Data / QE-Eng narrative + demo flow
-    </div>
-    <div class="asset-mini">
-      <span class="tag">NEW · SALES KIT</span>
-      <span class="title">Objection-Handling Cheat Sheet</span>
-      2-pager · Top 10 objections with proof points &amp; rebuttals
-    </div>
-    <div class="asset-mini">
-      <span class="tag">EXISTING · HINGE</span>
-      <span class="title">Webinar — From Sandbox to Scale</span>
-      45-min live · dual-track (business + technical)
-      <div class="meta">Week 6 live event · becomes evergreen</div>
-    </div>
-    <div class="asset-mini">
-      <span class="tag">EXISTING · ANCHOR</span>
-      <span class="title">1:1 Diagnostic Workshop</span>
-      SA + Client Partner guided · maturity score + roadmap
-      <div class="meta">The conversion event</div>
-    </div>
-  </div>
-
-  <h2 class="sec">8-Week Timeline</h2>
-  <p class="sec-sub">Compressed ABM cadence. Live webinar anchors Week 6. Fast-path lanes are live from Week 1 and run in parallel to the nurture track.</p>
-
-  <div class="timeline">
-    <div class="tl-week">
-      <span class="w">WEEK 1</span>
-      <span class="focus">Launch &amp; sales-readiness</span>
-      <ul>
-        <li>Sales kit live</li>
-        <li>TAL approved</li>
-        <li>Fast-path infra live</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 2</span>
-      <span class="focus">TOFU ignition</span>
-      <ul>
-        <li>Perspective + Blogs go live</li>
-        <li>Exec briefs mailed</li>
-        <li>LinkedIn organic wave</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 3</span>
-      <span class="focus">Amplify + webinar recruitment</span>
-      <ul>
-        <li>LinkedIn paid ramp</li>
-        <li>eBook gate launches</li>
-        <li>Webinar landing page live</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 4</span>
-      <span class="focus">Personalized exec outreach</span>
-      <ul>
-        <li>Partner-to-CXO LinkedIn</li>
-        <li>SA 1:1 pre-webinar</li>
-        <li>Webinar drip begins</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 5</span>
-      <span class="focus">Recruitment peak</span>
-      <ul>
-        <li>Last-call emails</li>
-        <li>LinkedIn retargeting</li>
-        <li>VIP confirmations</li>
-      </ul>
-    </div>
-    <div class="tl-week hinge">
-      <span class="w">WEEK 6</span>
-      <span class="focus">LIVE WEBINAR</span>
-      <ul>
-        <li>45-min live event</li>
-        <li>Partner-escorted attendance</li>
-        <li>Live Q&amp;A capture</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 7</span>
-      <span class="focus">Proof + workshop opens</span>
-      <ul>
-        <li>Personalized CS follow-up</li>
-        <li>Workshop invites</li>
-        <li>Webinar replay drip</li>
-      </ul>
-    </div>
-    <div class="tl-week">
-      <span class="w">WEEK 8</span>
-      <span class="focus">Workshops + pipeline</span>
-      <ul>
-        <li>Diagnostics delivered</li>
-        <li>First proposals drafted</li>
-        <li>Wave 2 debrief</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="note" style="margin-top: 28px;">
-    <b>Rule of thumb:</b> if it's not Email, LinkedIn (organic or paid), Website/Landing Page, Webinar, or Workshop — it's not in the MVP.
-    The fast-path infrastructure is the relief valve that catches hand-raisers without making the marketing cadence a constraint on real opportunities.
-  </div>
-</section>
-
-<!-- =========== JOURNEY =========== -->
-<section class="panel" id="journey">
-  <h2 class="sec">Prospect Journey — Click a Cell for Detail</h2>
-  <p class="sec-sub">Each target account moves through H / M / L intent bands based on ICP-fit + engagement signals. MVP is ABM-only, so every column is an ABM sub-track. Fast-path overlay shows how hand-raisers skip stages.</p>
-
-  <div class="journey-controls">
-    <div class="toggle-group">
-      <button class="j-ind active" data-ind="both">Both Industries</button>
-      <button class="j-ind" data-ind="hc">Healthcare Payer</button>
-      <button class="j-ind" data-ind="bfsi">BFSI</button>
-    </div>
-    <div class="toggle-group">
-      <button class="j-fp active" data-fp="on">Fast-Path Overlay ON</button>
-      <button class="j-fp" data-fp="off">OFF</button>
-    </div>
-  </div>
-
-  <div class="funnel">
-    <div class="stage-label">S0 Foundation<span class="timing">Wk 1 · pre-launch</span></div>
-    <div class="stage-cell cell-h"><b>High · 15 accts</b><ul><li>Exec intel brief</li><li>Tier-1 TAL sign-off</li></ul></div>
-    <div class="stage-cell cell-m"><b>Mid · 25 accts</b><ul><li>Standard account brief</li><li>ICP rubric applied</li></ul></div>
-    <div class="stage-cell cell-l"><b>Low · 10 accts</b><ul><li>Watch-list</li><li>Signal listening only</li></ul></div>
-
-    <div class="stage-label">S1 TOFU<span class="timing">Wk 1–4</span></div>
-    <div class="stage-cell cell-h"><b>High · Exec outreach</b><ul><li>Named exec briefing</li><li>Partner-to-CXO LinkedIn</li><li>Hero-industry Perspective variant</li></ul></div>
-    <div class="stage-cell cell-m"><b>Mid · Thought leadership</b><ul><li>Perspective + Blog 1 + Blog 2</li><li>LinkedIn carousel (atomic)</li><li>Account-matched landing</li></ul></div>
-    <div class="stage-cell cell-l"><b>Low · Awareness</b><ul><li>LinkedIn paid to account contacts</li><li>Org-page follower post</li></ul></div>
-
-    <div class="stage-label">S2 Webinar Recruit<span class="timing">Wk 3–6</span></div>
-    <div class="stage-cell cell-h"><b>High · White-glove</b><ul><li>CXO personal webinar invite</li><li>SA pre-webinar call offer</li><li>Curated pre-read kit</li></ul></div>
-    <div class="stage-cell cell-m"><b>Mid · Direct invite</b><ul><li>Personal email from AE</li><li>eBook gate for registration</li><li>3-email webinar drip</li></ul></div>
-    <div class="stage-cell cell-l"><b>Low · Paid LinkedIn</b><ul><li>Sponsored webinar invite</li><li>Retargeting sequence</li></ul></div>
-
-    <div class="stage-hinge">S3 · LIVE WEBINAR — "From Sandbox to Scale" (45 min, Week 6)</div>
-
-    <div class="stage-label">S4 Case Study<span class="timing">Wk 6–7</span></div>
-    <div class="stage-cell cell-h"><b>High · Attended</b><ul><li>Industry-matched CS personal send</li><li>Peer-benchmark pack</li><li>Loom-style SA follow-up</li></ul></div>
-    <div class="stage-cell cell-m"><b>Mid · Partial / Replay</b><ul><li>Webinar replay + CS email</li><li>"Talk to an SA" CTA</li></ul></div>
-    <div class="stage-cell cell-l"><b>Low · Re-nurture</b><ul><li>Webinar clip on LinkedIn</li><li>"Ready when you are" email</li></ul></div>
-
-    <div class="stage-label">S5 Workshop Conv<span class="timing">Wk 7–8</span></div>
-    <div class="stage-cell cell-h"><b>High · 1:1 invite</b><ul><li>Exec invite from SA + CP</li><li>Maturity preview</li><li>Pre-workshop prep kit</li></ul></div>
-    <div class="stage-cell cell-m"><b>Mid · Self-serve</b><ul><li>Workshop booking page</li><li>Pre-work questionnaire</li></ul></div>
-    <div class="stage-cell cell-l"><b>Low · Loop back</b><ul><li>Re-qualification scoring</li><li>eBook re-offer</li></ul></div>
-
-    <div class="stage-hinge" style="background: var(--green-50); border-color: var(--green); color: var(--green);">
-      S6 · 1:1 DIAGNOSTIC WORKSHOP — AI Assurance Maturity Assessment (SA + Client Partner)
-    </div>
-  </div>
-
-  <div class="fastpath-overlay" id="fp-overlay">
-    <h4>⚡ Fast-Path Overlay</h4>
-    Any account, at any stage, can raise its hand (inbound form, RFI, exec LinkedIn reply, live-webinar Q&amp;A, partner referral, expansion ask).
-    They skip the remaining stages and land directly at <b>S3 (webinar)</b> or <b>S6 (workshop)</b>, with SDR triage and a ≤ 4-hour first-response SLA.
-    See the <b>Hand-Raiser Fast-Path</b> tab for the full set of triggers and the routing logic.
-  </div>
-</section>
-
-<!-- =========== ASSETS =========== -->
-<section class="panel" id="assets">
-  <h2 class="sec">Asset Library — Visual Previews</h2>
-  <p class="sec-sub">Every net-new asset in the MVP, with a rendered preview. Each of these carries at least one clustered theme (T1–T5) and at least one channel role. The atomic derivatives (LinkedIn carousels, email subjects, paid ad variants) are built from these pillars — you'll see them in Channel Mix.</p>
-
-  <div class="al-grid">
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">PERSPECTIVE 1  ·  LONG-FORM</span>
-        <div class="title">The 5 Dimensions of Enterprise AI Assurance &amp; the Trust Gap</div>
-        <div class="sub">Themes T1 + T4  ·  ~1800 words  ·  used in: Website, LinkedIn organic, eBook source material</div>
+<!-- ============ OVERVIEW ============ -->
+<div class="panel active" id="overview">
+  <div class="card" style="margin-bottom:18px;">
+    <h2>Scope Locks</h2>
+    <div class="scope-grid">
+      <div class="scope-box in">
+        <div class="hd">In</div>
+        <ul>
+          <li>ABM motion only</li>
+          <li>Healthcare + BFSI</li>
+          <li>Email · LinkedIn (Organic + Paid) · Web · Webinar · Workshop</li>
+          <li>13-asset content stack (short-form + long-form + sales kit)</li>
+          <li>Hand-Raiser Fast-Paths</li>
+        </ul>
       </div>
-      <div class="al-preview" style="background: linear-gradient(180deg, #fff 0%, #EEF2F8 100%);">
-        <p style="font-size: 13px; margin: 0 0 8px;"><b>Opening hook:</b> "Nearly half of GenAI pilots are stalling not because the model is wrong, but because no one can prove it's right."</p>
-        <p style="font-size: 12.5px; color: var(--muted); margin: 0 0 6px;">5 Dimensions introduced — Ecosystem-Aware · Extract/Execute/Analyze · LLM-Agnostic · Domain-First · Global Engineering</p>
-        <div class="caption">Primary CTA: Download the Field Guide eBook · Secondary CTA: Register for webinar</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">BLOG 1  ·  MID-FUNNEL</span>
-        <div class="title">Escaping Pilot Purgatory</div>
-        <div class="sub">Theme T2  ·  ~900 words  ·  used in: Website, LinkedIn organic, Email drip</div>
-      </div>
-      <div class="al-preview" style="background: linear-gradient(180deg, #fff 0%, #FFF6D6 100%);">
-        <p style="font-size: 13px; margin: 0 0 8px;"><b>Narrative:</b> Why 70% of GenAI initiatives die between sandbox and scale — and the three architectural choices that separate the survivors.</p>
-        <p style="font-size: 12.5px; color: var(--muted); margin: 0;">Stats called out: 30% scale rate · manual QA friction costs · ROI payback math.</p>
-        <div class="caption">Primary CTA: "Take the 5-Q Maturity Diagnostic" · Secondary: Read the Perspective</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">BLOG 2  ·  MID-FUNNEL</span>
-        <div class="title">From Manual QA to Autonomous Agentic Assurance</div>
-        <div class="sub">Theme T3  ·  ~900 words  ·  used in: Website, LinkedIn, technical audience email</div>
-      </div>
-      <div class="al-preview" style="background: linear-gradient(180deg, #fff 0%, #E7F2E5 100%);">
-        <p style="font-size: 13px; margin: 0 0 8px;"><b>Technical framing:</b> Why script-based QA can't keep up with non-deterministic AI — and what agentic assurance actually looks like in production.</p>
-        <p style="font-size: 12.5px; color: var(--muted); margin: 0;">Diagrams: manual QA flow vs Helio assure orchestrator flow · Extract / Execute / Analyze.</p>
-        <div class="caption">Primary CTA: Register for webinar · Secondary: Book 15-min SA discovery call</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">FIELD GUIDE EBOOK  ·  GATED</span>
-        <div class="title">The 2026 AI Assurance Playbook for CXOs</div>
-        <div class="sub">Synthesis  ·  ~20 pages  ·  used in: Lead capture, ABM pre-read, webinar follow-up</div>
-      </div>
-      <div class="al-preview" style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-700) 100%); color: #fff;">
-        <div style="font-size: 10px; letter-spacing: 1.6px; color: #A6C2EA; font-weight: 600;">VIRTUSA FIELD GUIDE  ·  2026</div>
-        <div style="font-size: 19px; font-weight: 600; line-height: 1.2; margin: 8px 0 10px;">The AI Assurance Playbook for CXOs</div>
-        <div style="font-size: 12px; color: #C9D5EA;">5 Dimensions · Pilot-to-Scale Patterns · Agentic Assurance Reference Architecture · Proof-Point Library</div>
-        <div style="margin-top: 12px; display: flex; gap: 8px;">
-          <span style="background: #fff; color: var(--navy); padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600;">Download</span>
-          <span style="border: 1px solid #fff; padding: 4px 8px; border-radius: 3px; font-size: 11px;">Preview first chapter</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">CASE STUDY  ·  HEALTHCARE PAYER</span>
-        <div class="title">Talk2Doc + Appeals Automation</div>
-        <div class="sub">Native proof  ·  used in: S4 (post-webinar), workshop pre-read, sales kit</div>
-      </div>
-      <div class="al-preview">
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-          <div style="background: var(--green-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--green);">60%</div>
-            <div style="font-size: 10.5px; color: var(--muted);">Faster appeals</div>
-          </div>
-          <div style="background: var(--green-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--green);">$7M</div>
-            <div style="font-size: 10.5px; color: var(--muted);">Annual savings</div>
-          </div>
-          <div style="background: var(--green-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--green);">24/7</div>
-            <div style="font-size: 10.5px; color: var(--muted);">GenAI + Voice at scale</div>
-          </div>
-        </div>
-        <p style="font-size: 12px; margin: 0; color: var(--muted);">One-story coverage of member experience (Talk2Doc) + claims automation (Appeals). Packaged as 2-page leave-behind + 60-sec video cutdown.</p>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">CASE STUDY  ·  BFSI ANALOG</span>
-        <div class="title">From Theme Park to Trading Floor</div>
-        <div class="sub">Reframed from Theme Park 24/7 expert AI  ·  used in: BFSI S4, workshop pre-read</div>
-      </div>
-      <div class="al-preview">
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-          <div style="background: var(--blue-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--blue);">24/7</div>
-            <div style="font-size: 10.5px; color: var(--muted);">Expert AI uptime</div>
-          </div>
-          <div style="background: var(--blue-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--blue);">99.4%</div>
-            <div style="font-size: 10.5px; color: var(--muted);">Accuracy guarantee</div>
-          </div>
-          <div style="background: var(--blue-50); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-size: 20px; font-weight: 700; color: var(--blue);">80%</div>
-            <div style="font-size: 10.5px; color: var(--muted);">Lower manual effort</div>
-          </div>
-        </div>
-        <p style="font-size: 12px; margin: 0; color: var(--muted);">Reframes the 24/7 expert-AI operational pattern into capital-markets, fraud, and KYC contexts. Footer note: "Net-new BFSI customer proof-point to replace this analog lands in Wave 2."</p>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">SALES KIT  ·  BROCHURE</span>
-        <div class="title">Offering Brochure (1-pager)</div>
-        <div class="sub">PC-02-003  ·  AI Model Trust, Assurance &amp; Governance</div>
-      </div>
-      <div class="al-preview">
-        <div style="border: 1px solid var(--line); padding: 12px; background: #fff; font-size: 11.5px;">
-          <div style="color: var(--green); font-size: 10px; letter-spacing: 1.4px; font-weight: 700;">VIRTUSA DIGITAL ASSURANCE</div>
-          <div style="color: var(--navy); font-weight: 700; font-size: 14px; margin: 3px 0 6px;">AI Model Trust, Assurance &amp; Governance</div>
-          <div style="color: var(--muted); font-size: 11px; margin-bottom: 6px;">Powered by Virtusa Helio assure</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 10.5px;">
-            <div><b>Problem</b><br>Trust gap · non-deterministic behavior · manual friction</div>
-            <div><b>Solution</b><br>5 Dimensions · agentic QA · LLM-agnostic</div>
-            <div><b>Impact</b><br>99.4% / 60% / 80% proof points</div>
-          </div>
-        </div>
-        <div class="caption">One-page leave-behind after exec meetings and conference hand-offs.</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">SALES KIT  ·  OBJECTION CHEAT SHEET</span>
-        <div class="title">Top 10 Objections — Proof Points &amp; Rebuttals</div>
-        <div class="sub">2-pager  ·  internal use  ·  SA / AE enablement</div>
-      </div>
-      <div class="al-preview">
-        <div style="font-size: 11.5px;">
-          <div style="padding: 6px 0; border-bottom: 1px dashed var(--line);"><b style="color: var(--red);">"We already have QA covered."</b> → We're not replacing QA, we're assuring <i>non-deterministic</i> AI output. Reference: the 99.4% case…</div>
-          <div style="padding: 6px 0; border-bottom: 1px dashed var(--line);"><b style="color: var(--red);">"Too expensive."</b> → Talk to the $7M savings case…</div>
-          <div style="padding: 6px 0;"><b style="color: var(--red);">"Not ready for agentic."</b> → Start with the 5-Dimension diagnostic…</div>
-        </div>
-        <div class="caption">Short rebuttal formats so AEs/SAs don't freeze on tough pushback.</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">SALES KIT  ·  BUSINESS DECK</span>
-        <div class="title">Business-Audience Pitch Deck</div>
-        <div class="sub">12 slides  ·  CFO · CRO · Business Unit leaders</div>
-      </div>
-      <div class="al-preview">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; font-size: 9.5px;">
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>1.</b> Trust Gap hook</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>2.</b> Cost of failure</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>3.</b> Scale bottleneck</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>4.</b> 5 Dimensions</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>5.</b> Helio assure</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>6.</b> Proof: 99.4%</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>7.</b> Proof: $7M</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>8.</b> NelsonHall</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>9.</b> Maturity model</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>10.</b> 90-day sprint</div>
-          <div style="background: var(--green-50); padding: 6px; border-radius: 3px;"><b>11.</b> Workshop CTA</div>
-          <div style="background: var(--green-50); padding: 6px; border-radius: 3px;"><b>12.</b> Q&amp;A</div>
-        </div>
-        <div class="caption">Thin on tech depth. Heavy on risk, cost, competitive exposure.</div>
-      </div>
-    </div>
-
-    <div class="al-card">
-      <div class="al-head">
-        <span class="tag">SALES KIT  ·  TECHNICAL DECK</span>
-        <div class="title">Technical-Audience Pitch Deck</div>
-        <div class="sub">14 slides  ·  CTO · Chief Data · QE-Eng</div>
-      </div>
-      <div class="al-preview">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; font-size: 9.5px;">
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>1.</b> Non-determinism</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>2.</b> Eval limitations</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>3.</b> Extract flow</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>4.</b> Execute flow</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>5.</b> Analyze flow</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>6.</b> Agent arch</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>7.</b> LLM-agnostic</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>8.</b> Observability</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>9.</b> Guardrails</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>10.</b> Perf / cost</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>11.</b> Integrations</div>
-          <div style="background: var(--navy-50); padding: 6px; border-radius: 3px;"><b>12.</b> Live demo</div>
-          <div style="background: var(--green-50); padding: 6px; border-radius: 3px;"><b>13.</b> Deployment</div>
-          <div style="background: var(--green-50); padding: 6px; border-radius: 3px;"><b>14.</b> Next steps</div>
-        </div>
-        <div class="caption">Reference architecture + demo flow. Live Helio assure orchestrator walkthrough.</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- =========== CHANNELS =========== -->
-<section class="panel" id="channels">
-  <h2 class="sec">Channel Mix — Mockups for Each Touchpoint</h2>
-  <p class="sec-sub">The MVP ships across exactly six channels. Click through each to see a rendered mockup of what the asset looks like in that channel. Content is derived from the 10 pillar assets — no net-new writing per channel.</p>
-
-  <div class="channel-nav">
-    <button class="ch-btn active" data-ch="email">Email</button>
-    <button class="ch-btn" data-ch="li-organic">LinkedIn Organic</button>
-    <button class="ch-btn" data-ch="li-paid">LinkedIn Paid</button>
-    <button class="ch-btn" data-ch="web">Website &amp; Landing Pages</button>
-    <button class="ch-btn" data-ch="webinar">Webinar</button>
-    <button class="ch-btn" data-ch="workshop">Workshop</button>
-  </div>
-
-  <!-- EMAIL -->
-  <div class="channel-view active grid-2" id="ch-email">
-    <div class="email-mock">
-      <div class="email-head">
-        <div class="from">Sarah Chen, Client Partner — Virtusa</div>
-        <div class="meta">to: CIO, [Health Payer Tier-1]  ·  Tuesday, Week 4  ·  9:12 AM</div>
-        <div class="subject">The 5 dimensions behind [Payer]'s AI assurance gap — a 45-min read for your team</div>
-      </div>
-      <div class="email-body">
-        <p>Hi [First Name],</p>
-        <p>I've been comparing notes with a few payer CIOs this quarter and one pattern keeps surfacing: GenAI pilots look strong in the sandbox and then stall the moment assurance, compliance, and scale enter the room.</p>
-        <p>We put together our 2026 playbook for getting past that — 5 Dimensions, reference architecture, and two payer customer stories including one that cut appeals processing by 60% and saved $7M annually.</p>
-        <p>On Week 6 we're running a 45-minute exec session ("From Sandbox to Scale") where we walk through this with live Q&amp;A. I'd love to save a VIP seat for you and 1-2 of your leaders.</p>
-        <a href="#" class="email-cta">Reserve VIP Seat</a>
-        <p class="email-sig">— Sarah<br>Client Partner, Virtusa Digital Assurance<br>📅 <a href="#" style="color: var(--navy);">Book a 15-min discovery call instead</a></p>
-      </div>
-    </div>
-
-    <div class="email-mock">
-      <div class="email-head">
-        <div class="from">Virtusa Digital Assurance &lt;no-reply@virtusa.com&gt;</div>
-        <div class="meta">to: [Registered attendees]  ·  Thursday, Week 7  ·  8:00 AM</div>
-        <div class="subject">⚡ The proof: how a payer ran 60% faster appeals with AI assurance</div>
-      </div>
-      <div class="email-body">
-        <p>Thanks for joining "From Sandbox to Scale" last week — we promised to share the detailed case study, and here it is:</p>
-        <p><b>Healthcare Payer: 60% faster appeals, $7M saved annually.</b></p>
-        <p>Inside: the 5-Dimension scorecard, the orchestration pattern, the go-live timeline, and the remediation roadmap template.</p>
-        <a href="#" class="email-cta">Read the Case Study</a>
-        &nbsp; <a href="#" style="color: var(--navy); font-size: 12.5px;">Book your 1:1 diagnostic workshop →</a>
-        <p class="email-sig">— The Virtusa Digital Assurance team</p>
-      </div>
-    </div>
-
-    <div class="email-mock">
-      <div class="email-head">
-        <div class="from">Sarah Chen, Client Partner — Virtusa</div>
-        <div class="meta">to: CFO, [BFSI Tier-1]  ·  Monday, Week 8  ·  7:48 AM</div>
-        <div class="subject">Booked your 1:1 diagnostic — here's what Sonia will walk you through</div>
-      </div>
-      <div class="email-body">
-        <p>Hi [First Name],</p>
-        <p>Confirmed: Sonia Patel (Solution Architect) and I will run your 90-minute AI Assurance Maturity Diagnostic on [Date].</p>
-        <p>You'll leave with: a scored heatmap across our 5 Dimensions, a remediation roadmap with sequencing, and a 90-day sprint plan you can take straight to your board.</p>
-        <p>Pre-read (10 minutes): the 2-page brochure and the BFSI case study are attached. No homework required beyond that.</p>
-        <a href="#" class="email-cta">View Invite &amp; Pre-Read</a>
-        <p class="email-sig">— Sarah</p>
-      </div>
-    </div>
-
-    <div class="email-mock">
-      <div class="email-head">
-        <div class="from">Sarah Chen, Client Partner — Virtusa</div>
-        <div class="meta">to: [Inbound hand-raiser]  ·  Auto-sent within 5 minutes of form submit</div>
-        <div class="subject">Got your note — Sonia will be in touch within 4 business hours</div>
-      </div>
-      <div class="email-body">
-        <p>Hi [First Name],</p>
-        <p>Thanks for reaching out about a 1:1 AI Assurance Diagnostic. One of our Solution Architects (Sonia Patel) will reach out to you within <b>4 business hours</b> to lock a time that works.</p>
-        <p>In the meantime, here are two things to glance at:</p>
-        <p>→ <a href="#" style="color: var(--navy);">What happens in a 90-min diagnostic</a> (2-min read)<br>
-        → <a href="#" style="color: var(--navy);">Relevant case study for your industry</a></p>
-        <p class="email-sig">— Sarah, Virtusa Digital Assurance<br><i>This is an auto-response; Sonia's reply will be personal.</i></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- LINKEDIN ORGANIC -->
-  <div class="channel-view grid-2" id="ch-li-organic">
-    <div class="li-mock">
-      <div class="li-head">
-        <div class="li-avatar">RM</div>
-        <div>
-          <div class="name">Ravi Menon</div>
-          <div class="title-sub">SVP, Digital Assurance · Virtusa</div>
-          <div class="timestamp">2d · 🌐</div>
-        </div>
-      </div>
-      <div class="li-body">Nearly 70% of GenAI pilots stall between sandbox and scale. It's almost never the model. It's the assurance gap.
-
-We just published our 2026 playbook for enterprise leaders — 5 dimensions, agentic patterns, and two customer proof points. Link in the first comment.
-
-#AIAssurance #GenAI #DigitalAssurance</div>
-      <div class="li-image">The 5 Dimensions of Enterprise AI Assurance</div>
-      <div class="li-reactions">👍 Shruti Vora and 247 others  ·  38 comments</div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-head">
-        <div class="li-avatar" style="background: linear-gradient(135deg, var(--green), #4A9C4F);">SP</div>
-        <div>
-          <div class="name">Sonia Patel</div>
-          <div class="title-sub">Solution Architect · AI Assurance @ Virtusa</div>
-          <div class="timestamp">5d · 🌐</div>
-        </div>
-      </div>
-      <div class="li-body">Healthcare payer customer: 60% faster appeals processing. $7M annual savings. 24/7 member experience via GenAI + Voice.
-
-All of it with enterprise assurance baked in, not bolted on.
-
-Posting the 2-page case study breakdown below 👇</div>
-      <div class="li-image carousel">CAROUSEL · 5 cards · swipe →</div>
-      <div class="li-reactions">👍 Ravi Menon and 132 others  ·  21 comments  ·  47 reposts</div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-head">
-        <div class="li-avatar" style="background: linear-gradient(135deg, var(--amber), #D9A200);">VD</div>
-        <div>
-          <div class="name">Virtusa Digital Assurance</div>
-          <div class="title-sub">Company Page · 52,000 followers</div>
-          <div class="timestamp">1w · 🌐</div>
-        </div>
-      </div>
-      <div class="li-body">POLL — Where does enterprise AI assurance usually break first?
-
-🔹 Non-deterministic output
-🔹 Manual QA friction
-🔹 Ecosystem integration gaps
-🔹 Regulatory compliance
-
-Vote below ↓ and we'll share benchmark results next week.</div>
-      <div class="li-image" style="background: linear-gradient(135deg, #FFF6D6 0%, #F2D57A 100%); color: var(--amber);">POLL · 4 options · 3 days</div>
-      <div class="li-reactions">🗳 1,843 votes  ·  76 comments</div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-head">
-        <div class="li-avatar">SC</div>
-        <div>
-          <div class="name">Sarah Chen</div>
-          <div class="title-sub">Client Partner, Healthcare &amp; Life Sciences · Virtusa</div>
-          <div class="timestamp">Sponsored via Partner  ·  🌐</div>
-        </div>
-      </div>
-      <div class="li-body">Running a closed-door exec session on Nov 12 with 30 payer and provider CIOs — "From Sandbox to Scale: Deploying AI with Total Confidence."
-
-45 minutes. Live Q&amp;A. Real customer proof. Limited to 30 seats.
-
-Comment "interested" or DM me for an invite.</div>
-      <div class="li-reactions">👍 84 reactions  ·  17 comments  ·  "interested" ×23</div>
-    </div>
-  </div>
-
-  <!-- LINKEDIN PAID -->
-  <div class="channel-view grid-2" id="ch-li-paid">
-    <div class="li-mock">
-      <div class="li-sponsored">Promoted</div>
-      <div class="li-head">
-        <div class="li-avatar" style="background: linear-gradient(135deg, var(--amber), #D9A200);">VD</div>
-        <div>
-          <div class="name">Virtusa Digital Assurance</div>
-          <div class="title-sub">Audience: Health Payer Tier-1 · CIO+ · 25 accounts</div>
-        </div>
-      </div>
-      <div class="li-body">The 2026 AI Assurance Playbook for CXOs — a 20-page field guide for leaders scaling GenAI responsibly.
-
-✅ The 5 Dimensions framework
-✅ Agentic reference architecture
-✅ 2 enterprise proof points</div>
-      <div class="li-image">Download the Field Guide → (PDF, 20 pp)</div>
-      <div class="li-reactions">
-        <span><b>virtusa.com</b> · Download eBook</span>
-      </div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-sponsored">Promoted</div>
-      <div class="li-head">
-        <div class="li-avatar" style="background: linear-gradient(135deg, var(--navy), var(--green));">VW</div>
-        <div>
-          <div class="name">Virtusa Webinar</div>
-          <div class="title-sub">Audience: BFSI Tier-1 · Chief Risk / CTO · 25 accounts</div>
-        </div>
-      </div>
-      <div class="li-body"><b>From Sandbox to Scale</b> — a live 45-min session with Virtusa's AI Assurance leaders.
-
-How Healthcare Payers and Capital Markets firms are running AI with 99.4% accuracy and 24/7 uptime — and the 5-dimension playbook behind it.
-
-Nov 12 · 11 AM ET · Registration required.</div>
-      <div class="li-image" style="background: linear-gradient(135deg, var(--navy), var(--green));">REGISTER → 11 AM ET · Nov 12</div>
-      <div class="li-reactions">
-        <span><b>virtusa.com/webinar</b> · Register now</span>
-      </div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-sponsored">Sponsored · Conversation Ad</div>
-      <div class="li-head">
-        <div class="li-avatar">SC</div>
-        <div>
-          <div class="name">Sarah Chen</div>
-          <div class="title-sub">Client Partner · Virtusa · Retargeting: eBook downloaders</div>
-        </div>
-      </div>
-      <div class="li-body">Hi [First Name] — I saw you grabbed our AI Assurance playbook.
-
-If it's useful, I'd love to walk through how the 5-Dimension scorecard would apply to your team specifically. 90-min diagnostic, no pitch-deck, just honest assessment.
-
-Worth a conversation?</div>
-      <div class="li-reactions">
-        <span><b>[Book a slot]</b>  ·  [Send the CS instead]  ·  [Not right now]</span>
-      </div>
-    </div>
-
-    <div class="li-mock">
-      <div class="li-sponsored">Promoted · Carousel Ad</div>
-      <div class="li-head">
-        <div class="li-avatar" style="background: linear-gradient(135deg, var(--amber), #D9A200);">VD</div>
-        <div>
-          <div class="name">Virtusa Digital Assurance</div>
-          <div class="title-sub">Audience: Webinar attendees · Case-study retargeting</div>
-        </div>
-      </div>
-      <div class="li-body">Five signs you're living in the AI Trust Gap → swipe through the carousel, then book your 1:1 diagnostic.</div>
-      <div class="li-image carousel">CAROUSEL · 5 cards · swipe →</div>
-      <div class="li-reactions">
-        <span><b>virtusa.com/workshop</b> · Book diagnostic</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- WEBSITE -->
-  <div class="channel-view grid-2" id="ch-web">
-    <div class="lp-mock">
-      <div class="lp-nav">
-        <span class="logo">VIRTUSA</span>
-        <a href="#">Industries</a>
-        <a href="#">Services</a>
-        <a href="#">AI Assurance</a>
-        <a href="#">Webinar</a>
-        <a href="#">Contact</a>
-      </div>
-      <div class="lp-hero">
-        <h1>From Sandbox to Scale: Deploy AI with Total Confidence</h1>
-        <p>Join 30 enterprise leaders for a live 45-minute session on the 5 Dimensions of Enterprise AI Assurance — plus 2 customer proof points.</p>
-        <a href="#" class="lp-cta">Register Now →</a>
-        <a href="#" class="lp-cta secondary">Watch 60-sec preview</a>
-      </div>
-      <div class="lp-body">
-        <h3>What you'll leave with</h3>
-        <ul style="margin: 0; padding-left: 16px; color: var(--muted);">
-          <li>The 5-Dimension scorecard for your AI program</li>
-          <li>Live Helio assure orchestrator demo</li>
-          <li>Access to the 2026 AI Assurance Field Guide</li>
+      <div class="scope-box out">
+        <div class="hd">Out</div>
+        <ul>
+          <li>Net-new logo demand-gen</li>
+          <li>Paid search · programmatic · podcast · events</li>
+          <li>Syndication / 3rd-party content partnerships</li>
+          <li>Industry-specific campaigns beyond Healthcare + BFSI</li>
+          <li>Any channel not in the 5 approved</li>
         </ul>
       </div>
     </div>
+  </div>
 
-    <div class="lp-mock">
-      <div class="lp-nav">
-        <span class="logo">VIRTUSA</span>
-        <a href="#">Workshop</a>
-        <a href="#">Case Studies</a>
-        <a href="#">Resources</a>
-      </div>
-      <div class="lp-hero" style="background: linear-gradient(135deg, var(--green) 0%, #1E5C22 100%);">
-        <h1>Book Your 1:1 AI Assurance Diagnostic</h1>
-        <p>90 minutes with our Solution Architect + Client Partner. Leave with a maturity score, remediation roadmap, and 90-day sprint plan.</p>
-        <a href="#" class="lp-cta" style="color: var(--green);">Book a Slot →</a>
-        <a href="#" class="lp-cta secondary">What's in the diagnostic?</a>
-      </div>
-      <div class="lp-body">
-        <h3>Tell us a bit about your team</h3>
-        <div class="lp-form-row">
-          <div class="lp-form-field">First name</div>
-          <div class="lp-form-field">Last name</div>
+  <div style="margin-bottom:18px;">
+    <div class="card">
+      <h2>Content Inventory — by Funnel Stage</h2>
+      <div class="inv-grid">
+        <div class="inv-col tofu">
+          <div class="inv-hd">TOFU — Awareness</div>
+          <div class="inv-sub">Short-form anchors; LinkedIn + email openers; offering intro</div>
+          <div class="inv-item"><span class="inv-type">Perspective</span><span class="inv-t">P1 · Closing the AI Trust Gap</span><div class="inv-p">Confidence as the real differentiator.</div></div>
+          <div class="inv-item"><span class="inv-type">Perspective</span><span class="inv-t">P2 · Blueprint for AI Scale</span><div class="inv-p">Five dimensions of enterprise assurance.</div></div>
+          <div class="inv-item"><span class="inv-type">Blog</span><span class="inv-t">B1 · Beyond the Trust Gap</span><div class="inv-p">Moving to agentic assurance.</div></div>
+          <div class="inv-item"><span class="inv-type">Blog</span><span class="inv-t">B2 · Escaping Pilot Purgatory</span><div class="inv-p">Why legacy QA blocks AI.</div></div>
+          <div class="inv-item"><span class="inv-type">Blog</span><span class="inv-t">B3 · Enterprise AI Done Right</span><div class="inv-p">Trust beyond the hype.</div></div>
+          <div class="inv-item"><span class="inv-type">Brochure</span><span class="inv-t">S1 · Offering Overview Brochure</span><div class="inv-p">Leave-behind · send-ahead.</div></div>
         </div>
-        <div class="lp-form-row">
-          <div class="lp-form-field">Company</div>
-          <div class="lp-form-field">Title</div>
+        <div class="inv-col mofu">
+          <div class="inv-hd">MOFU — Consideration</div>
+          <div class="inv-sub">Long-form anchors; webinar hinge; proof; seller enablement</div>
+          <div class="inv-item"><span class="inv-type">eBook</span><span class="inv-t">L1 · Field Guide 2026</span><div class="inv-p">The AI Assurance Playbook for CXOs.</div></div>
+          <div class="inv-item"><span class="inv-type">Webinar</span><span class="inv-t">L2 · From Sandbox to Scale</span><div class="inv-p">45-min live + evergreen on-demand.</div></div>
+          <div class="inv-item"><span class="inv-type">Case Study</span><span class="inv-t">C1 · Healthcare genAI Call Summarization</span><div class="inv-p">Virtusa Talk2Doc proof point.</div></div>
+          <div class="inv-item"><span class="inv-type">Client Deck</span><span class="inv-t">S2 · Business-Leader Deck</span><div class="inv-p">For CIO / CDO / CXO.</div></div>
+          <div class="inv-item"><span class="inv-type">Client Deck</span><span class="inv-t">S3 · Technical-Leader Deck</span><div class="inv-p">For VP Eng / Head of Data.</div></div>
+          <div class="inv-item"><span class="inv-type">Cheat Sheet</span><span class="inv-t">S4 · Objection-Handling</span><div class="inv-p">Seller enablement · 2 pp.</div></div>
         </div>
-        <div class="lp-form-row">
-          <div class="lp-form-field">Industry (Healthcare / BFSI / Other)</div>
-          <div class="lp-form-field">Biggest AI assurance concern</div>
-        </div>
-        <div style="color: var(--muted); font-size: 11.5px; margin-top: 8px;">
-          ⚡ <b>Fast-Path B</b> — you'll get a response within 4 business hours and a workshop booked within 5 business days (Tier-1) / 10 days (Tier-2).
+        <div class="inv-col bofu">
+          <div class="inv-hd">BOFU — Decision</div>
+          <div class="inv-sub">Diagnostic workshop — the conversion hinge</div>
+          <div class="inv-item"><span class="inv-type">Workshop</span><span class="inv-t">L3 · 1:1 Diagnostic Workshop</span><div class="inv-p">Diagnostic Workshop.</div></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="lp-mock">
-      <div class="lp-nav">
-        <span class="logo">VIRTUSA</span>
-        <a href="#">AI Assurance Home</a>
-      </div>
-      <div class="lp-hero" style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-700) 100%);">
-        <h1>Hi [Account Name] — Ready for Trusted AI at Scale?</h1>
-        <p>We've assembled a custom snapshot of AI assurance patterns relevant to [Industry] enterprises like yours.</p>
-        <a href="#" class="lp-cta">See Your Snapshot</a>
-      </div>
-      <div class="lp-body" style="font-size: 12px;">
-        <h3>Personalized for [Account]</h3>
-        <p>Reverse-IP landing page, triggered only when someone from [Account]'s corporate network hits the page. Shows a personalized hero and industry-matched proof point.</p>
-      </div>
+  <div class="card">
+    <h2>8-Week Launch Timeline</h2>
+    <div class="timeline">
+      <div class="tl-week"><div class="wk">W1</div>List · LPs · Automation</div>
+      <div class="tl-week"><div class="wk">W2</div>TOFU content live (P1/P2 + B1-B3)</div>
+      <div class="tl-week"><div class="wk">W3</div>MOFU — Field Guide gate + webinar LP</div>
+      <div class="tl-week"><div class="wk">W4</div>Exec targeting + SDR mini-BDR</div>
+      <div class="tl-week"><div class="wk">W5</div>Pre-event amplification</div>
+      <div class="tl-week hinge"><div class="wk">W6</div>LIVE Webinar (hinge)</div>
+      <div class="tl-week"><div class="wk">W7</div>S4 Proof layer + fast-path surge</div>
+      <div class="tl-week"><div class="wk">W8</div>Evergreen + first workshops</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONTENT & ASSET LIBRARY (merged) ============ -->
+<div class="panel" id="library">
+  <div class="card" style="margin-bottom:14px;">
+    <h2>Content &amp; Asset Library — 13 Assets</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin: 0 0 10px;">
+      Grouped by asset type. Funnel stage chip (TOFU / MOFU / BOFU) appears on each card.
+      Use the filter to slice by funnel. Finished-content previews are placeholders — titles and logic are set; content owners fill the previews in.
+    </p>
+    <div class="journey-toggle" style="margin-bottom: 0;">
+      <button class="active" data-cgfilter="all">All (13)</button>
+      <button data-cgfilter="tofu">TOFU (6)</button>
+      <button data-cgfilter="mofu">MOFU (6)</button>
+      <button data-cgfilter="bofu">BOFU (1)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="group-hd">Short-form Anchor Assets (5)</div>
+    <div class="cg-grid" id="libshort"></div>
+
+    <div class="group-hd">Long-form Anchor Assets (4)</div>
+    <div class="cg-grid" id="liblong"></div>
+
+    <div class="group-hd">Sales Kit (4)</div>
+    <div class="cg-grid" id="libsales"></div>
+  </div>
+</div>
+
+<!-- ============ PROSPECT JOURNEY ============ -->
+<div class="panel" id="journey">
+  <div class="card" style="margin-bottom:14px;">
+    <h2>Prospect Journey — H / M / L Intent Tracks</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin: 0 0 10px;">
+      Six stages from first touch to workshop &amp; pipeline. H / M / L tracks show how the same stage is expressed by intent level.
+      Asset references are shown in italic; finished content sits in the Content Gallery.
+    </p>
+
+    <div class="journey-toggle">
+      <span style="font-size:12px; color:var(--muted);">View:</span>
+      <button class="active" data-jtog="both">Both Industries</button>
+      <button data-jtog="hc">Healthcare</button>
+      <button data-jtog="bfsi">BFSI</button>
+      <span style="margin-left:auto; font-size:12px; color:var(--muted);">
+        <label><input type="checkbox" id="fptoggle"> Overlay Fast-Paths</label>
+      </span>
     </div>
 
-    <div class="lp-mock">
-      <div class="lp-nav">
-        <span class="logo">VIRTUSA</span>
-        <a href="#">Resources</a>
-      </div>
-      <div class="lp-hero" style="background: linear-gradient(135deg, var(--amber) 0%, #805E00 100%);">
-        <h1>The 2026 AI Assurance Playbook for CXOs</h1>
-        <p>20 pages. 5 Dimensions. 2 enterprise case studies. The reference you'll send to your CIO.</p>
-        <a href="#" class="lp-cta" style="color: var(--amber);">Download PDF →</a>
-      </div>
-      <div class="lp-body">
-        <h3>Get the field guide</h3>
-        <div class="lp-form-row">
-          <div class="lp-form-field">Work email</div>
-          <div class="lp-form-field">Company</div>
+    <div class="journey-grid">
+      <div></div>
+      <div class="jr-col-hd h">High Intent</div>
+      <div class="jr-col-hd m">Medium Intent</div>
+      <div class="jr-col-hd l">Low Intent</div>
+
+      <div class="jr-row-hd">S1<br>TOFU</div>
+      <div class="jr-cell h"><span class="t">Exec-personalized hook</span>CP-signed invite referencing account context. Perspective P1/P2 hand-delivered.<div class="assets">Assets: P1, P2, Field Guide teaser</div></div>
+      <div class="jr-cell m"><span class="t">Organic + paid mix</span>LinkedIn organic (exec handles) + paid retargeting. Email nurture kicks off.<div class="assets">Assets: B1, B3, P1</div></div>
+      <div class="jr-cell l"><span class="t">Paid awareness only</span>Conversion-obj paid LI ads. Email openers seeded.<div class="assets">Assets: B2, B3</div></div>
+
+      <div class="jr-row-hd">S2<br>MOFU</div>
+      <div class="jr-cell h"><span class="t">Exec invite + SA prep</span>Named-sender webinar invite; SA 15-min prep call; Field Guide hand-delivered.<div class="assets">Assets: L2 invite, L1 Field Guide</div></div>
+      <div class="jr-cell m"><span class="t">Webinar LP + gated download</span>Webinar registration primary; Field Guide gate fallback.<div class="assets">Assets: L2 LP, L1 gate</div></div>
+      <div class="jr-cell l"><span class="t">Retargeting + 4-touch email</span>Paid LI retargeting; email nurture with Field Guide gate.<div class="assets">Assets: L1 gate, B2</div></div>
+
+      <div class="jr-row-hd">S3<br>WEBINAR</div>
+      <div class="jr-cell h" style="grid-column: span 3; background: #D7E7FB; border-color: var(--navy);"><span class="t">W6 Live "From Sandbox to Scale" (45 min)</span>Dual-track narrative (business + technical). Post-event segmentation at midnight → H attended / M partial / L no-show.<div class="assets">Asset: L2 live recording · 6 chapterized clips produced post-event</div></div>
+
+      <div class="jr-row-hd">S4<br>PROOF</div>
+      <div class="jr-cell h"><span class="t">Peer benchmark conversation</span>SA-led session; Healthcare case study + Field Guide industry chapter; Workshop Outline teaser.<div class="assets">Assets: C1, L1 industry chapter, L3 teaser</div></div>
+      <div class="jr-cell m"><span class="t">Proof pack + analyst dossier</span>Healthcare case study + full Field Guide + analyst mentions.<div class="assets">Assets: C1, L1 full, analyst proof points</div></div>
+      <div class="jr-cell l"><span class="t">On-demand replay + re-nurture</span>Webinar replay push; chapter clips on LinkedIn; "Missed it?" email drip.<div class="assets">Assets: L2 replay, clips, B2</div></div>
+
+      <div class="jr-row-hd">S5<br>WORKSHOP</div>
+      <div class="jr-cell h"><span class="t">1:1 SA invite</span>Workshop Outline preview; P2 as primer; pre-workshop prep kit.<div class="assets">Assets: L3 preview, P2, prep kit</div></div>
+      <div class="jr-cell m"><span class="t">Self-serve booking</span>Workshop LP; Brochure send-ahead; pre-work questionnaire.<div class="assets">Assets: L3 LP, S1 brochure</div></div>
+      <div class="jr-cell l"><span class="t">Re-qualification loop</span>Field Guide re-drop; evergreen clips; L→M trigger on new signals.<div class="assets">Assets: L1 re-drop, L2 clips</div></div>
+
+      <div class="jr-row-hd">S6<br>DELIVERY</div>
+      <div class="jr-cell h" style="grid-column: span 3; background: #D6EDD4; border-color: var(--green);"><span class="t">90-min 1:1 Diagnostic Workshop (SA + CP)</span>Output: 5-dim scorecard + remediation roadmap + 90-day sprint plan. S2/S3 decks support follow-up; S1 leave-behind; S4 cheat sheet supports objections.<div class="assets">Assets: L3 facilitation, S1-S4 sales kit</div></div>
+    </div>
+
+    <div class="fp-overlay" id="fpoverlay">
+      <h3>Fast-Path Overlay</h3>
+      <div class="fp-lanes">
+        <div class="fp-lane a">
+          <b style="color:var(--navy);">Fast-Path A — Direct-to-Webinar</b><br>
+          <span style="font-size:11.5px;">Hand-raise → SDR triage → VIP webinar seat (&lt;= 24h). Inherits Field Guide drop + workshop CTA.</span>
         </div>
-        <div style="color: var(--muted); font-size: 11.5px; margin-top: 8px;">
-          Lead-capture gate for the synthesis eBook. High-value contacts auto-route to SDR for personal follow-up.
+        <div class="fp-lane b">
+          <b style="color:var(--green);">Fast-Path B — Direct-to-Workshop</b><br>
+          <span style="font-size:11.5px;">Hand-raise → SDR triage → AE+SA engaged (&lt;= 24h) → workshop booked (&lt;= 5 BD Tier-1). Workshop Outline preview sent.</span>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ============ CHANNEL MIX ============ -->
+<div class="panel" id="channels">
+  <div class="ch-tabs" id="chtabs">
+    <button class="active" data-ch="email">Email</button>
+    <button data-ch="liorg">LinkedIn Organic</button>
+    <button data-ch="lipaid">LinkedIn Paid</button>
+    <button data-ch="web">Website / LPs</button>
+    <button data-ch="webinar">Webinar</button>
+    <button data-ch="workshop">Workshop</button>
+  </div>
+
+  <!-- EMAIL -->
+  <div class="ch-panel active" id="ch-email">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">Primary nurture and exec re-engagement channel. Short, named-sender, single-CTA. Content previews below are placeholders.</p>
+    </div>
+    <div class="row g2" id="ch-email-grid"></div>
+  </div>
+
+  <!-- LI ORGANIC -->
+  <div class="ch-panel" id="ch-liorg">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">Executive + company posting cadence. 3/week. Published by practice lead, AI head, and company page. Short-form anchors (P1/P2, B1-B3) are the sources.</p>
+    </div>
+    <div class="row g2" id="ch-liorg-grid"></div>
+  </div>
+
+  <!-- LI PAID -->
+  <div class="ch-panel" id="ch-lipaid">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">ABM matched-audience targeting. Awareness, consideration, conversion, retargeting. Placeholders denote where finished ad creative will live.</p>
+    </div>
+    <div class="row g2" id="ch-lipaid-grid"></div>
+  </div>
+
+  <!-- WEBSITE -->
+  <div class="ch-panel" id="ch-web">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">Four landing pages carry the campaign. Hero LP is reverse-IP personalized. All LPs host placeholder finished-art previews.</p>
+    </div>
+    <div class="row g2" id="ch-web-grid"></div>
   </div>
 
   <!-- WEBINAR -->
-  <div class="channel-view grid-2" id="ch-webinar">
-    <div class="webinar-mock">
-      <div class="webinar-hero">
-        <div class="label">WEEK 6  ·  LIVE  ·  45 MINUTES</div>
-        <h2>From Sandbox to Scale:<br>How to Deploy AI with Total Confidence</h2>
-        <div class="detail">Hosted by Ravi Menon &amp; Sonia Patel  ·  Live Q&amp;A  ·  Live Helio assure demo</div>
-      </div>
-      <div class="webinar-agenda">
-        <h4>AGENDA</h4>
-        <div class="agenda-item"><div class="t">00:00</div><div>Welcome &amp; Virtusa 60-sec intro<div class="s">Ravi Menon</div></div><div class="t">3 min</div></div>
-        <div class="agenda-item"><div class="t">03:00</div><div>The AI Trust Gap — what's actually breaking<div class="s">Business framing · T1</div></div><div class="t">7 min</div></div>
-        <div class="agenda-item"><div class="t">10:00</div><div>The 5 Dimensions of Enterprise AI Assurance<div class="s">Framework walk-through · T4</div></div><div class="t">10 min</div></div>
-        <div class="agenda-item"><div class="t">20:00</div><div>LIVE: Helio assure Orchestrator Demo<div class="s">Extract · Execute · Analyze · Sonia Patel</div></div><div class="t">10 min</div></div>
-        <div class="agenda-item"><div class="t">30:00</div><div>Proof: Healthcare Payer &amp; BFSI Analog<div class="s">Customer stories · T5</div></div><div class="t">8 min</div></div>
-        <div class="agenda-item"><div class="t">38:00</div><div>Live Q&amp;A + "Book a 1:1 Diagnostic" CTA<div class="s">Hand-raiser capture</div></div><div class="t">7 min</div></div>
-      </div>
+  <div class="ch-panel" id="ch-webinar">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">Wave 1 live session at Week 6; Wave 2 evergreen + chapterized clips from Week 8. Dual-track (business + technical).</p>
     </div>
-
-    <div class="webinar-mock">
-      <div class="webinar-hero" style="background: linear-gradient(135deg, var(--navy) 0%, var(--amber) 100%); aspect-ratio: 16/10;">
-        <div class="label">EVERGREEN  ·  ON-DEMAND</div>
-        <h2>The 6 Chapterized Clips</h2>
-        <div class="detail">Re-cut from the live Wave-1 session · each clip 3–5 minutes</div>
-      </div>
-      <div class="webinar-agenda">
-        <div class="agenda-item"><div class="t">CLIP 1</div><div>Why 70% of pilots die at scale<div class="s">LinkedIn organic / email drip</div></div><div class="t">4:12</div></div>
-        <div class="agenda-item"><div class="t">CLIP 2</div><div>The 5 Dimensions in 4 minutes<div class="s">LinkedIn paid / landing-page hero</div></div><div class="t">4:01</div></div>
-        <div class="agenda-item"><div class="t">CLIP 3</div><div>Live demo snippet — agentic QA<div class="s">Technical-audience nurture</div></div><div class="t">3:40</div></div>
-        <div class="agenda-item"><div class="t">CLIP 4</div><div>60% appeals story in 3 min<div class="s">Healthcare follow-up · email</div></div><div class="t">3:15</div></div>
-        <div class="agenda-item"><div class="t">CLIP 5</div><div>Trading-floor analog in 3 min<div class="s">BFSI follow-up · email</div></div><div class="t">3:22</div></div>
-        <div class="agenda-item"><div class="t">CLIP 6</div><div>"Book your diagnostic" CTA<div class="s">Retargeting · LinkedIn paid</div></div><div class="t">1:10</div></div>
-      </div>
-    </div>
+    <div class="row g2" id="ch-webinar-grid"></div>
   </div>
 
   <!-- WORKSHOP -->
-  <div class="channel-view grid-2" id="ch-workshop">
-    <div class="ws-mock">
-      <div class="ws-head">
-        <div>
-          <div class="title">AI Assurance Maturity Assessment</div>
-          <div class="sub">[Account Name] · Healthcare Payer · 90-min diagnostic output</div>
-        </div>
-        <div class="ws-score">3.6<span class="max">/5.0</span></div>
-      </div>
-      <div style="font-size: 11.5px; color: var(--muted); margin-bottom: 10px;">Scored across the 5 Dimensions by SA + Client Partner</div>
-      <div class="dim-row">
-        <div class="dn">Ecosystem-Aware Validation</div>
-        <div class="dim-bar"><div class="fill" style="width: 70%;"></div></div>
-        <div class="dv">3.5</div>
-      </div>
-      <div class="dim-row">
-        <div class="dn">Extract / Execute / Analyze</div>
-        <div class="dim-bar"><div class="fill" style="width: 82%;"></div></div>
-        <div class="dv">4.1</div>
-      </div>
-      <div class="dim-row">
-        <div class="dn">LLM-Agnostic Architecture</div>
-        <div class="dim-bar"><div class="fill" style="width: 62%;"></div></div>
-        <div class="dv">3.1</div>
-      </div>
-      <div class="dim-row">
-        <div class="dn">Domain-First Guardrails</div>
-        <div class="dim-bar"><div class="fill" style="width: 74%;"></div></div>
-        <div class="dv">3.7</div>
-      </div>
-      <div class="dim-row">
-        <div class="dn">Global Engineering</div>
-        <div class="dim-bar"><div class="fill" style="width: 70%;"></div></div>
-        <div class="dv">3.5</div>
-      </div>
-      <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted);">
-        <b style="color: var(--navy);">Next step:</b> 90-day sprint plan focused on LLM-Agnostic + Ecosystem gaps. Proposal to land within 10 business days.
-      </div>
+  <div class="ch-panel" id="ch-workshop">
+    <div class="card" style="margin-bottom:12px;">
+      <h3>Role</h3>
+      <p style="font-size:12.5px; margin:0;">BOFU conversion. 90-min 1:1 SA + CP facilitation. Output placeholders capture where the scorecard + roadmap + sprint plan live.</p>
     </div>
+    <div class="row g2" id="ch-workshop-grid"></div>
+  </div>
+</div>
 
-    <div class="ws-mock">
-      <div class="ws-head">
-        <div>
-          <div class="title">90-Day AI Assurance Sprint Plan</div>
-          <div class="sub">Workshop deliverable  ·  takes straight to CIO / board</div>
-        </div>
-      </div>
-      <div style="font-size: 12px;">
-        <div style="padding: 8px 0; border-bottom: 1px dashed var(--line);">
-          <b style="color: var(--navy);">Weeks 1–3 · Foundation</b>
-          <div style="color: var(--muted); font-size: 11.5px;">Helio assure deployment · orchestrator config · team briefing</div>
-        </div>
-        <div style="padding: 8px 0; border-bottom: 1px dashed var(--line);">
-          <b style="color: var(--navy);">Weeks 4–6 · Pilot Assurance</b>
-          <div style="color: var(--muted); font-size: 11.5px;">First use case scored · guardrails tuned · accuracy baseline set</div>
-        </div>
-        <div style="padding: 8px 0; border-bottom: 1px dashed var(--line);">
-          <b style="color: var(--navy);">Weeks 7–9 · Scale-Out</b>
-          <div style="color: var(--muted); font-size: 11.5px;">Extend to 2–3 additional use cases · observability dashboards · Ops handoff</div>
-        </div>
-        <div style="padding: 8px 0;">
-          <b style="color: var(--green);">Week 10+ · Board-Ready Proof</b>
-          <div style="color: var(--muted); font-size: 11.5px;">Impact report · ROI narrative · next 90 days scoped</div>
-        </div>
-      </div>
-      <div style="margin-top: 14px; padding: 10px 12px; background: var(--green-50); border-radius: 4px; font-size: 12px; color: var(--green);">
-        <b>Conversion anchor:</b> this sprint plan is the single document that moves the conversation from exploration into proposal.
-      </div>
+<!-- ============ FAST-PATH ============ -->
+<div class="panel" id="fastpath">
+  <div class="card" style="margin-bottom:14px;">
+    <h2>Hand-Raiser Triggers — Click any to see routing</h2>
+    <div class="trigger-grid" id="triggers"></div>
+  </div>
+
+  <div class="detail-panel" id="triggerdetail">
+    <h3>Select a trigger above</h3>
+    <p style="font-size:12.5px; color:var(--muted);">Each trigger routes through SDR Fast-Path Triage. Lane A goes to webinar; Lane B goes to workshop. Unqualified inbounds route to M-intent nurture.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <h2>SLA Ladder</h2>
+    <div class="sla-ladder">
+      <div class="sla-step"><div class="sla-t">1 · Auto-ack</div><div class="sla-v">&lt;= 5 minutes (automated)</div></div>
+      <div class="sla-step"><div class="sla-t">2 · First human response</div><div class="sla-v">&lt;= 4 business hours (SDR)</div></div>
+      <div class="sla-step"><div class="sla-t">3 · Calendar hold / invite</div><div class="sla-v">&lt;= 24 hours</div></div>
+      <div class="sla-step"><div class="sla-t">4a · Webinar VIP seat</div><div class="sla-v">&lt;= 24 hours (Fast-Path A)</div></div>
+      <div class="sla-step"><div class="sla-t">4b · Workshop booked (T1)</div><div class="sla-v">&lt;= 5 business days (Fast-Path B)</div></div>
+      <div class="sla-step"><div class="sla-t">5 · Reporting re-entry</div><div class="sla-v">Source tagged at S3/S6</div></div>
     </div>
   </div>
 
-</section>
-
-<!-- =========== FAST-PATH =========== -->
-<section class="panel" id="fastpath">
-  <h2 class="sec">Hand-Raiser Fast-Paths — Click a Trigger to Simulate Routing</h2>
-  <p class="sec-sub">Marketing automation never becomes a constraint on a real opportunity. Any hand-raiser routes through SDR triage within 4 business hours and lands on the right fast-path, or gracefully falls back into nurture.</p>
-
-  <div class="fp-layout">
-    <div class="fp-triggers" id="fp-triggers">
-      <!-- Populated by JS -->
-    </div>
-    <div class="fp-detail" id="fp-detail">
-      <!-- Populated by JS -->
+  <div class="card">
+    <h2>Guardrails</h2>
+    <div class="guardrails">
+      <div class="guard"><b>Capacity cap</b> — Fast-Path B capped at 8 active workshops/month per SA-CP pair to preserve quality.</div>
+      <div class="guard"><b>Opportunity-first</b> — Opportunity record created at triage, not after the workshop.</div>
+      <div class="guard"><b>Weekly triage review</b> — RevOps + Marketing review dispositions weekly to prevent leakage.</div>
+      <div class="guard"><b>Escalation path</b> — Any hand-raise from a named Tier-1 account → same-day SA review.</div>
+      <div class="guard"><b>Reporting re-entry</b> — Fast-path outcomes re-join the main funnel at S3 or S6 with source tagged.</div>
+      <div class="guard"><b>Content inheritance</b> — Fast-path invitees still receive Field Guide + workshop prep kit.</div>
     </div>
   </div>
+</div>
 
-  <hr class="hrule" />
+<!-- ============ PREDICT ============ -->
+<div class="panel" id="predict">
+  <div class="card">
+    <h2>Live Funnel Predictor — Move the sliders</h2>
+    <div class="predict-grid">
+      <div class="sliders" id="sliders">
+        <div class="slider-row"><div><div class="lbl">Target Account List (total)</div><div class="hint">Tier-1 + Tier-2 combined</div></div><div class="val" id="v-tal">150</div></div>
+        <div><input type="range" id="s-tal" min="20" max="300" value="150" step="5"></div>
+        <div class="slider-row"><div><div class="lbl">Engagement Rate</div><div class="hint">Any asset view</div></div><div class="val" id="v-eng">35%</div></div>
+        <div><input type="range" id="s-eng" min="15" max="70" value="35" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Webinar Registration</div><div class="hint">Of engaged accounts</div></div><div class="val" id="v-reg">45%</div></div>
+        <div><input type="range" id="s-reg" min="20" max="75" value="45" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Live Attendance</div><div class="hint">Of registered</div></div><div class="val" id="v-att">55%</div></div>
+        <div><input type="range" id="s-att" min="30" max="80" value="55" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Workshop Conversion (nurture)</div><div class="hint">Of TAL that reaches S5</div></div><div class="val" id="v-ws">20%</div></div>
+        <div><input type="range" id="s-ws" min="5" max="45" value="20" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Fast-Path Workshops (8 wk)</div><div class="hint">Additive hand-raiser count</div></div><div class="val" id="v-fp">4</div></div>
+        <div><input type="range" id="s-fp" min="0" max="15" value="4" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Pipeline Conversion</div><div class="hint">Of workshops → qualified opps</div></div><div class="val" id="v-pip">65%</div></div>
+        <div><input type="range" id="s-pip" min="30" max="90" value="65" step="1"></div>
+        <div class="slider-row"><div><div class="lbl">Avg Deal Size (TCV)</div><div class="hint">$50K min · $50K steps · median $500K</div></div><div class="val" id="v-val">$500K</div></div>
+        <div><input type="range" id="s-val" min="50" max="1500" value="500" step="50"></div>
+      </div>
 
-  <h2 class="sec">SLA Ladder &amp; Guardrails</h2>
-
-  <div class="grid-2">
-    <div class="card">
-      <h3>SLA Ladder</h3>
-      <ul class="sla-ladder">
-        <li class="sla-step"><div class="when">≤ 5 min</div><div class="what"><b>Auto-acknowledgement</b> · welcome email with expectations &amp; pre-read links</div></li>
-        <li class="sla-step"><div class="when">≤ 4 hr</div><div class="what"><b>First human response</b> · SDR outbound call or personalized email</div></li>
-        <li class="sla-step"><div class="when">≤ 24 hr</div><div class="what"><b>Calendar hold</b> · SA + Client Partner tentative slot booked · agenda sent</div></li>
-        <li class="sla-step"><div class="when">≤ 48 hr</div><div class="what"><b>SA intro call</b> · scoping questions, confirm pre-read · qualification notes complete</div></li>
-        <li class="sla-step"><div class="when">≤ 5 BD</div><div class="what"><b>Workshop delivered</b> (Tier-1) · 90-min diagnostic · scorecard + roadmap handed over</div></li>
-        <li class="sla-step"><div class="when">≤ 10 BD</div><div class="what"><b>Proposal drafted</b> · Helio assure implementation proposal + 90-day sprint plan</div></li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3>Guardrails</h3>
-      <div class="guardrails">
-        <div class="guard"><b>Capacity cap.</b> ~15 ABM-grade workshops/month. Overflow routed to senior-SA pool or Wave 2.</div>
-        <div class="guard"><b>Opportunity-first.</b> Every fast-path intake creates an opportunity record before workshop is booked.</div>
-        <div class="guard"><b>Weekly triage review.</b> Client Partner + MOps review inbound pipeline every Friday.</div>
-        <div class="guard"><b>72-hour escalation.</b> No SA contact within 72 hr? Auto-escalation to Client Partner.</div>
-        <div class="guard"><b>Reporting re-entry.</b> Fast-path conversions report at S3 (webinar) or S6 (workshop) so funnel math stays unified, but lane source is tagged.</div>
-        <div class="guard"><b>Content inheritance.</b> Fast-Path B skips S1–S5 content but SA pulls matching industry CS + brochure for pre-read.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========== PREDICT =========== -->
-<section class="panel" id="predict">
-  <h2 class="sec">Predict the Wave 1 Funnel</h2>
-  <p class="sec-sub">Drag the sliders to stress-test the MVP math. Defaults are ABM-typical benchmarks for an 8-week Wave 1 with 50 Tier-1 accounts split across Healthcare Payer (25) and BFSI (25). Results recalculate instantly.</p>
-
-  <div class="predict-layout">
-    <div class="pred-controls">
-      <div class="slider-row">
-        <label>Tier-1 target accounts (TAL) <b><span id="v-tal">50</span></b></label>
-        <input type="range" id="s-tal" min="20" max="150" value="50" step="5">
-        <div class="slider-hint">MVP default: 50 (split 25 HC + 25 BFSI)</div>
-      </div>
-      <div class="slider-row">
-        <label>Account engagement rate <b><span id="v-eng">35</span>%</b></label>
-        <input type="range" id="s-eng" min="15" max="70" value="35" step="1">
-        <div class="slider-hint">% of TAL with ≥ 1 engaged contact</div>
-      </div>
-      <div class="slider-row">
-        <label>Webinar registration rate <b><span id="v-reg">45</span>%</b></label>
-        <input type="range" id="s-reg" min="20" max="75" value="45" step="1">
-        <div class="slider-hint">% of engaged accounts that register</div>
-      </div>
-      <div class="slider-row">
-        <label>Live attendance rate <b><span id="v-att">55</span>%</b></label>
-        <input type="range" id="s-att" min="30" max="80" value="55" step="1">
-        <div class="slider-hint">% of registrations that show up live</div>
-      </div>
-      <div class="slider-row">
-        <label>Workshop booking from nurture <b><span id="v-ws">20</span>%</b></label>
-        <input type="range" id="s-ws" min="5" max="45" value="20" step="1">
-        <div class="slider-hint">% of TAL that book via nurture path</div>
-      </div>
-      <div class="slider-row">
-        <label>Fast-path workshops (additive) <b><span id="v-fp">4</span></b></label>
-        <input type="range" id="s-fp" min="0" max="15" value="4" step="1">
-        <div class="slider-hint">Hand-raisers bypassing the nurture funnel</div>
-      </div>
-      <div class="slider-row">
-        <label>Workshop → Pipeline conversion <b><span id="v-pip">65</span>%</b></label>
-        <input type="range" id="s-pip" min="30" max="90" value="65" step="1">
-        <div class="slider-hint">% of workshops that become qualified opps</div>
-      </div>
-      <div class="slider-row">
-        <label>Avg deal size (TCV, USD) <b>$<span id="v-deal">425</span>K</b></label>
-        <input type="range" id="s-deal" min="100" max="1500" value="425" step="25">
-        <div class="slider-hint">Helio assure implementation + services</div>
-      </div>
-    </div>
-
-    <div class="pred-results">
-      <h3>Wave 1 Funnel Projection</h3>
-      <div class="pred-funnel" id="pred-funnel">
-        <!-- Dynamically filled -->
-      </div>
-      <div class="pred-summary">
-        <div>
-          <div class="lb">Total Workshops</div>
-          <div class="vl" id="sum-ws">—</div>
-          <div class="tag">nurture + fast-path</div>
+      <div>
+        <h3 style="margin-top:0;">Funnel</h3>
+        <div class="pred-funnel" id="pred-funnel"></div>
+        <div class="summary-kpis">
+          <div class="sk-card"><div class="sk-l">Total Workshops</div><div class="sk-v" id="sum-ws">-</div></div>
+          <div class="sk-card"><div class="sk-l">Qualified Pipeline</div><div class="sk-v" id="sum-pip">-</div></div>
+          <div class="sk-card green"><div class="sk-l">Pipeline Value (TCV)</div><div class="sk-v" id="sum-val">-</div></div>
         </div>
-        <div>
-          <div class="lb">Qualified Pipeline</div>
-          <div class="vl" id="sum-pip">—</div>
-          <div class="tag">opportunities</div>
-        </div>
-        <div>
-          <div class="lb">Pipeline Value</div>
-          <div class="vl" id="sum-val">—</div>
-          <div class="tag">TCV</div>
-        </div>
-      </div>
-      <div class="note" style="margin-top: 18px;">
-        <b>How to read this:</b> the top of the funnel (accounts engaged, registrations, attendance) compounds multiplicatively — a 5-point lift on each compounds to ~15% more workshops. The fast-path adds workshops independently of the nurture funnel, which is the whole point of preserving that lane.
       </div>
     </div>
   </div>
-</section>
+</div>
 
 </main>
 
-<footer class="app-footer">
-  Virtusa Digital Assurance · AI Model Trust, Assurance &amp; Governance · Campaign MVP Interactive Preview · v2
+<footer>
+  Virtusa Digital Assurance · AI Model Trust, Assurance &amp; Governance · MVP v3 · Titles + logic + placeholders · Single-file HTML
 </footer>
 
 <script>
-  // Tab switching
-  const tabs = document.querySelectorAll('.tab-btn');
-  const panels = document.querySelectorAll('.panel');
-  tabs.forEach(t => t.addEventListener('click', () => {
-    tabs.forEach(x => x.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.tab).classList.add('active');
+  // ---------- TABS ----------
+  const tabBtns = document.querySelectorAll('#tabnav button');
+  const panels = document.querySelectorAll('main .panel');
+  tabBtns.forEach(b => b.addEventListener('click', () => {
+    tabBtns.forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const t = b.dataset.tab;
+    panels.forEach(p => p.classList.toggle('active', p.id === t));
   }));
 
-  // Channel switching
-  const chBtns = document.querySelectorAll('.ch-btn');
-  const chViews = document.querySelectorAll('.channel-view');
-  chBtns.forEach(b => b.addEventListener('click', () => {
-    chBtns.forEach(x => x.classList.remove('active'));
-    chViews.forEach(v => v.classList.remove('active'));
-    b.classList.add('active');
-    document.getElementById('ch-' + b.dataset.ch).classList.add('active');
-  }));
-
-  // Journey toggles (purely visual feedback)
-  document.querySelectorAll('.j-ind').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('.j-ind').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-  }));
-  document.querySelectorAll('.j-fp').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('.j-fp').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    document.getElementById('fp-overlay').style.display = (b.dataset.fp === 'on') ? '' : 'none';
-  }));
-
-  // Fast-path triggers
-  const triggers = [
-    { id: 't1', name: 'Inbound — "Book a Workshop"', src: 'Website CTA · webinar follow-up · email signature', lane: 'B',
-      detail: 'Direct landing-page CTA → form → Fast-Path B. Opportunity record auto-created; SDR qualification within 4 business hours; SA + Client Partner workshop within 5 business days for Tier-1. This is the single highest-volume lane.' },
-    { id: 't2', name: 'Inbound — "Contact Sales / Request Demo"', src: 'Global site form · product page · LinkedIn company page', lane: 'B',
-      detail: 'Demo ask routes through SDR triage; if ICP fits, Fast-Path B with a demo overlay inside the diagnostic workshop. If ICP does not fit, polite routing into M-intent nurture.' },
-    { id: 't3', name: 'RFI / RFP received', src: 'Procurement portal · email inbound · existing-account RFI', lane: 'B',
-      detail: 'Triggers the RFI Response Accelerator Pack + expedited workshop booking. Client Partner owns the relationship; SA owns technical response. Target: proposal within 10 business days.' },
-    { id: 't4', name: 'Analyst / Partner referral', src: 'NelsonHall · ISG · hyperscaler or SI partner hand-off', lane: 'B',
-      detail: 'White-glove treatment. Client Partner takes point, with Partner-Alliance awareness. Pre-read kit includes partner-specific proof + Virtusa credentials deck. Workshop within 5 business days.' },
-    { id: 't5', name: 'Executive LinkedIn reply', src: 'Warm reply to Partner-to-CXO cadence (Top-50 list)', lane: 'B',
-      detail: 'Solution Architect + Industry Partner pair up. Offer is a 15-min micro-briefing first, then a full 90-min diagnostic if there\'s fit. Can preview the on-demand webinar in advance.' },
-    { id: 't6', name: 'Conference / event hand-off', src: 'Booth meeting request · badge scan · speaker follow-up', lane: 'A or B',
-      detail: 'If the conversation was exploratory → Fast-Path A (webinar invite). If the conversation was substantive → Fast-Path B (workshop). Field Marketing owns lead transfer within 4 business hours.' },
-    { id: 't7', name: 'Sales-nominated prospect', src: 'AE or SA fills internal form to fast-track a known prospect', lane: 'A or B',
-      detail: 'Bypasses automation entirely. The nominating AE becomes the owner and picks the lane. Includes override to skip SDR if AE vouches for qualification.' },
-    { id: 't8', name: 'Existing-account expansion ask', src: 'Customer Success flags a new LOB or BU with AI Assurance interest', lane: 'B',
-      detail: 'Existing-account relationship means the Client Partner owns the whole motion. Workshop is positioned as an extension diagnostic; commercial framing emphasizes expansion pricing.' },
-    { id: 't9', name: 'eBook downloader + VP+ title + target account', src: 'Gated field guide form · fits ICP + firmographic', lane: 'A',
-      detail: 'Fast-Path A — personalized webinar invite from an Industry Partner. If they accept, SDR offers a 15-min pre-webinar discovery call to start the relationship warm.' },
-    { id: 't10', name: 'Live-webinar Q&A capture', src: 'Q&A question · live chat · "book a 1:1" click during the live session', lane: 'B',
-      detail: 'Partner-on-call during the live event sees the raised hand, sends a personal LinkedIn message during the last 10 minutes of the webinar, and books a slot by end of day. Same-day SLA.' },
-    { id: 't11', name: 'Returning high-score contact', src: 'Known contact re-surfaces with CS + eBook + pricing-page signals combined', lane: 'A or B',
-      detail: 'Signal-score refresh triggers auto-nominate into fast-path queue. SDR reviews to decide A vs B based on role, account status, and recency of engagement.' },
-    { id: 't12', name: '"Not yet qualified" after triage', src: 'Triage finds weak signals (wrong ICP, no budget, wrong timing)', lane: 'Overflow',
-      detail: 'Warm exit, not a dead-end. Re-route into M-intent nurture with an explicit "when you\'re ready" note. Scoring refresh fires again in 30 days to catch re-emerging signals.' },
+  // ---------- CONTENT MODEL ----------
+  const content = [
+    // Short-form
+    { id:'P1', type:'perspective', typeLabel:'Perspective', funnel:'tofu', title:'Closing the AI Trust Gap', sub:'Confidence as differentiator', owner:'Practice Lead', format:'~1200 words · PDF + LP' },
+    { id:'P2', type:'perspective', typeLabel:'Perspective', funnel:'tofu', title:'Blueprint for AI Scale', sub:'Five dimensions of assurance', owner:'Practice Lead', format:'~1500 words · PDF + LP' },
+    { id:'B1', type:'blog', typeLabel:'Blog', funnel:'tofu', title:'Beyond the Trust Gap', sub:'Moving to agentic assurance', owner:'AI Head', format:'~800 words' },
+    { id:'B2', type:'blog', typeLabel:'Blog', funnel:'tofu', title:'Escaping Pilot Purgatory', sub:'Why legacy QA blocks AI', owner:'Practice SME', format:'~900 words' },
+    { id:'B3', type:'blog', typeLabel:'Blog', funnel:'tofu', title:'Enterprise AI Done Right', sub:'Trust beyond the hype', owner:'AI Head', format:'~900 words' },
+    // Long-form
+    { id:'L1', type:'ebook', typeLabel:'eBook', funnel:'mofu', title:'Field Guide 2026 — AI Assurance Playbook for CXOs', sub:'Flagship gated long-form', owner:'Content Lead', format:'28-36 pp · PDF' },
+    { id:'L2', type:'webinar', typeLabel:'Webinar', funnel:'mofu', title:'From Sandbox to Scale', sub:'Live 45-min + evergreen + 6 clips', owner:'Campaign PM', format:'Live + on-demand' },
+    { id:'C1', type:'cs', typeLabel:'Case Study', funnel:'mofu', title:'Healthcare genAI Call Summarization', sub:'Virtusa Talk2Doc proof point', owner:'Industry Lead', format:'2 pp · PDF + web' },
+    { id:'L3', type:'workshop', typeLabel:'Workshop', funnel:'bofu', title:'1:1 Diagnostic Workshop', sub:'Diagnostic Workshop', owner:'SA Lead', format:'6-10 pp · PDF' },
+    // Sales
+    { id:'S1', type:'collateral', typeLabel:'Brochure', funnel:'tofu', title:'Offering Overview Brochure', sub:'Leave-behind · send-ahead', owner:'Marketing', format:'4 pp · print + digital' },
+    { id:'S2', type:'deck', typeLabel:'Client Deck', funnel:'mofu', title:'Business-Leader Deck', sub:'For CIO / CDO / CXO', owner:'AE Enablement', format:'12-14 slides' },
+    { id:'S3', type:'deck', typeLabel:'Client Deck', funnel:'mofu', title:'Technical-Leader Deck', sub:'For VP Eng / Head of Data', owner:'SA Enablement', format:'14-16 slides' },
+    { id:'S4', type:'cheat', typeLabel:'Cheat Sheet', funnel:'mofu', title:'Pitching & Objection-Handling', sub:'Seller 2-pager', owner:'Sales Enablement', format:'Front / back' },
   ];
 
-  const trigBox = document.getElementById('fp-triggers');
-  triggers.forEach((t, i) => {
-    const el = document.createElement('div');
-    el.className = 'fp-trigger' + (i === 0 ? ' active' : '');
-    el.dataset.id = t.id;
-    el.innerHTML = `<div class="head">${t.name}</div><div class="src">${t.src}</div>`;
-    trigBox.appendChild(el);
-    el.addEventListener('click', () => {
-      document.querySelectorAll('.fp-trigger').forEach(x => x.classList.remove('active'));
-      el.classList.add('active');
-      renderDetail(t);
+  function renderContentCard(c) {
+    return `<div class="cg-card" data-f="${c.funnel}">
+      <div class="cg-hd">
+        <span class="chip ${c.funnel}">${c.funnel.toUpperCase()}</span>
+        <span class="chip ${c.type}">${c.typeLabel}</span>
+      </div>
+      <div class="cg-title">${c.id} · ${c.title}</div>
+      <div class="cg-gist">${c.sub}</div>
+      <div class="placeholder">
+        <div class="ph-icon">◇</div>
+        <div class="ph-label">Finished preview</div>
+        <div class="ph-sub">Owner: ${c.owner} · ${c.format}</div>
+      </div>
+    </div>`;
+  }
+
+  // ---------- CONTENT & ASSET LIBRARY (merged) ----------
+  const libShort = content.filter(c => ['perspective','blog'].includes(c.type));
+  const libLong  = content.filter(c => ['ebook','webinar','cs','workshop'].includes(c.type));
+  const libSales = content.filter(c => ['S1','S2','S3','S4'].includes(c.id));
+  document.getElementById('libshort').innerHTML = libShort.map(renderContentCard).join('');
+  document.getElementById('liblong').innerHTML  = libLong.map(renderContentCard).join('');
+  document.getElementById('libsales').innerHTML = libSales.map(renderContentCard).join('');
+
+  // Funnel-stage filter spans all three group grids
+  document.querySelectorAll('[data-cgfilter]').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('[data-cgfilter]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const f = b.dataset.cgfilter;
+      document.querySelectorAll('#libshort .cg-card, #liblong .cg-card, #libsales .cg-card').forEach(el => {
+        el.style.display = (f === 'all' || el.dataset.f === f) ? '' : 'none';
+      });
     });
   });
 
-  function laneClass(l) {
-    if (l === 'A') return 'lane-a';
-    if (l === 'B') return 'lane-b';
-    if (l === 'Overflow') return 'lane-overflow';
-    return 'lane-b';
-  }
-  function laneLabel(l) {
-    if (l === 'A') return 'FAST-PATH A · DIRECT TO WEBINAR';
-    if (l === 'B') return 'FAST-PATH B · DIRECT TO WORKSHOP';
-    if (l === 'A or B') return 'FAST-PATH A OR B (depends on triage)';
-    return 'OVERFLOW · ROUTE TO NURTURE';
-  }
-  function renderDetail(t) {
-    const box = document.getElementById('fp-detail');
-    box.innerHTML = `
-      <h3>${t.name}</h3>
-      <div class="lane ${laneClass(t.lane)}">${laneLabel(t.lane)}</div>
-      <p style="font-size: 13px; line-height: 1.55;">${t.detail}</p>
-      <div style="margin-top: 16px; padding: 12px 14px; background: var(--navy-50); border-radius: 6px; font-size: 12px;">
-        <b style="color: var(--navy);">Routing flow:</b>
-        Trigger &nbsp;→&nbsp; Hand-Raiser Inbox &nbsp;→&nbsp; SDR Triage (≤ 4 hr) &nbsp;→&nbsp; ${
-          t.lane === 'A' ? 'S3 Webinar (VIP invite)' :
-          t.lane === 'B' ? 'S6 Workshop (SA + CP)' :
-          t.lane === 'Overflow' ? 'M-Intent Nurture (re-score in 30d)' :
-          'S3 or S6 based on triage decision'
-        }
+  // ---------- JOURNEY TOGGLES ----------
+  document.querySelectorAll('.journey-toggle button[data-jtog]').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.journey-toggle button[data-jtog]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+  const fpChk = document.getElementById('fptoggle');
+  fpChk.addEventListener('change', () => {
+    document.getElementById('fpoverlay').classList.toggle('active', fpChk.checked);
+  });
+
+  // ---------- CHANNEL MIX PLAYS ----------
+  const ph = (label, sub='Finished preview placeholder') =>
+    `<div class="placeholder tall">
+      <div class="ph-icon">◇</div>
+      <div class="ph-label">${label}</div>
+      <div class="ph-sub">${sub}</div>
+    </div>`;
+
+  const plays = {
+    email: [
+      { title:'T1 · Exec invite (CP → CXO)', stage:'TOFU', asset:'P1 or P2', trigger:'List entry', audience:'CXO · named Tier-1', cta:'Book 20-min call' },
+      { title:'T2 · Webinar invite (AE → champion)', stage:'MOFU', asset:'L2 + L1 mention', trigger:'Engaged account', audience:'Biz/Tech champion', cta:'Register for webinar' },
+      { title:'T3 · Field Guide drop (MKT list-wide)', stage:'MOFU', asset:'L1', trigger:'Pre-event amplification', audience:'All TAL', cta:'Download the Field Guide' },
+      { title:'T4 · Workshop confirmation + prep', stage:'BOFU', asset:'L3 + prep kit', trigger:'Workshop booked', audience:'Workshop attendees', cta:'Complete pre-work' },
+      { title:'T5 · Re-engagement drip (no-show)', stage:'S4 low', asset:'B2 → B3 → P2 → L1', trigger:'Webinar no-show', audience:'Non-attendees', cta:'Watch replay / get the Field Guide' },
+      { title:'T6 · Fast-path auto-ack', stage:'Any', asset:'System', trigger:'Hand-raise fired', audience:'Hand-raiser', cta:'SDR will follow up within 4h' },
+    ],
+    liorg: [
+      { title:'Post 1 · Exec perspective', stage:'TOFU', asset:'P1', trigger:'W2', audience:'Followers + reposts', cta:'Read on LP' },
+      { title:'Post 2 · Five-dimension carousel', stage:'TOFU', asset:'P2', trigger:'W3', audience:'Followers + reposts', cta:'Get the Field Guide' },
+      { title:'Post 3 · Company page · webinar invite', stage:'MOFU', asset:'L2 + B2 context', trigger:'W4', audience:'Followers + event', cta:'Register' },
+      { title:'Post 4 · Customer-voice snippet', stage:'MOFU proof', asset:'C1 excerpt', trigger:'W7', audience:'Followers', cta:'Read the case study' },
+      { title:'Post 5 · Exec poll', stage:'Re-engagement', asset:'B2 framing', trigger:'W7', audience:'Connections', cta:'Vote + DM' },
+      { title:'Post 6 · Evergreen clips roll-out', stage:'Wave 2', asset:'L2 chapter clips', trigger:'W8+', audience:'Followers + paid boost', cta:'Watch on-demand' },
+    ],
+    lipaid: [
+      { title:'Ad 1 · Awareness sponsored content', stage:'TOFU', asset:'P2 / B3', trigger:'W2', audience:'Matched Tier-1 + Tier-2', cta:'LP visit' },
+      { title:'Ad 2 · Webinar event ad', stage:'MOFU', asset:'L2', trigger:'W3-W5', audience:'Matched TAL', cta:'Register' },
+      { title:'Ad 3 · Field Guide message ad', stage:'MOFU', asset:'L1', trigger:'W3-W6', audience:'Exec titles', cta:'Download' },
+      { title:'Ad 4 · Retargeting (LP visitors)', stage:'Retargeting', asset:'L3 preview / B2', trigger:'Rolling W2-W8', audience:'LP visitors', cta:'Book workshop' },
+    ],
+    web: [
+      { title:'LP 1 · Hero (reverse-IP personalized)', stage:'All', asset:'P1 + P2 + L1 gate', trigger:'Top-of-funnel entry', audience:'TAL · detected industry', cta:'Explore / Download / Register' },
+      { title:'LP 2 · Webinar registration', stage:'MOFU', asset:'L2 agenda + speaker bios', trigger:'W2-W6', audience:'All TAL', cta:'Save your seat' },
+      { title:'LP 3 · Workshop booking', stage:'BOFU', asset:'L3 preview + booking calendar', trigger:'S5 + fast-path', audience:'Qualified accounts', cta:'Book a workshop' },
+      { title:'LP 4 · Field Guide download gate', stage:'MOFU', asset:'L1 TOC preview + pull-quotes', trigger:'Paid / organic', audience:'CXO titles', cta:'Get the PDF' },
+    ],
+    webinar: [
+      { title:'Wave 1 · Live session (W6)', stage:'S3 hinge', asset:'L2 agenda', trigger:'W6 Wed 11am ET', audience:'Registered TAL', cta:'Book workshop from Q&A' },
+      { title:'Wave 2 · Evergreen + 6 chapter clips', stage:'S3 evergreen', asset:'L2 chapters 1-6', trigger:'W8+', audience:'On-demand viewers', cta:'Download Field Guide · Book workshop' },
+      { title:'Post-event segmentation rules', stage:'S4 routing', asset:'Automation logic', trigger:'Midnight W6', audience:'All registrants', cta:'Auto-route to S4 H/M/L' },
+    ],
+    workshop: [
+      { title:'Pre-work questionnaire', stage:'48h prior', asset:'L3 pre-work', trigger:'Workshop booked', audience:'Attendees', cta:'Submit pre-work' },
+      { title:'Live facilitation · 90 min', stage:'S6 delivery', asset:'L3 facilitator script', trigger:'Workshop day', audience:'Customer team + SA + CP', cta:'Co-build scorecard' },
+      { title:'Output artifact · 5-dim scorecard', stage:'S6 output', asset:'L3 scorecard template', trigger:'End of session', audience:'Customer exec', cta:'Review + schedule roadmap session' },
+      { title:'Output artifact · 90-day sprint plan', stage:'S6 output', asset:'L3 sprint template', trigger:'Within 48h post', audience:'Customer exec + CP', cta:'Approve sprint / proposal next' },
+    ],
+  };
+
+  function renderPlay(p) {
+    return `<div class="play-card">
+      <div class="pc-title">${p.title}</div>
+      <div class="pc-meta">
+        <span>Stage:</span><span><b>${p.stage}</b></span>
+        <span>Asset:</span><span><b>${p.asset}</b></span>
+        <span>Trigger:</span><span>${p.trigger}</span>
+        <span>Audience:</span><span>${p.audience}</span>
+        <span>CTA:</span><span><b>${p.cta}</b></span>
       </div>
+      ${ph('Finished content preview', 'Creative to be dropped in here')}
+    </div>`;
+  }
+  Object.keys(plays).forEach(k => {
+    document.getElementById('ch-' + k + '-grid').innerHTML = plays[k].map(renderPlay).join('');
+  });
+
+  // ---------- CHANNEL TAB SWITCHING ----------
+  document.querySelectorAll('#chtabs button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('#chtabs button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const target = 'ch-' + b.dataset.ch;
+      document.querySelectorAll('.ch-panel').forEach(p => p.classList.toggle('active', p.id === target));
+    });
+  });
+
+  // ---------- FAST-PATH TRIGGERS ----------
+  const triggers = [
+    { t: 'Inbound contact-sales form', src: 'Website LP form', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'SDR → AE+SA' },
+    { t: 'Inbound RFI / RFP', src: 'Email / procurement portal', lane: 'b', slot: 'Fast-Path B (Workshop or Proposal)', owner: 'AE+SA → CP' },
+    { t: 'AE-SA nominated account', src: 'Internal nomination', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'AE+SA' },
+    { t: 'Partner referral / analyst', src: 'Partner portal · analyst', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'Partner Mgr → AE+SA' },
+    { t: 'Exec LinkedIn reply / DM', src: 'LI inbox of practice lead', lane: 'a', slot: 'Fast-Path A (Webinar) or B', owner: 'SDR → CP' },
+    { t: 'Conference hand-off', src: 'On-site lead capture', lane: 'a', slot: 'Fast-Path A (Webinar)', owner: 'SDR → AE' },
+    { t: 'Existing-account expansion ask', src: 'CSM / AE flag', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'CSM → AE+SA' },
+    { t: 'Webinar live-chat demo ask', src: 'Q&A / chat capture', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'SDR → AE+SA' },
+    { t: "LP 'Book Workshop' CTA click", src: 'Landing page button', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'SDR' },
+    { t: 'High-value retargeting click', src: 'Paid LI conv event', lane: 'a', slot: 'Fast-Path A (Webinar)', owner: 'SDR' },
+    { t: 'Peer referral inside account', src: 'Attendee intro', lane: 'a', slot: 'Fast-Path A (Webinar)', owner: 'AE' },
+    { t: 'Competitor loss re-engagement', src: 'Sales-surface flag', lane: 'b', slot: 'Fast-Path B (Workshop)', owner: 'AE+CP' },
+  ];
+  const tgrid = document.getElementById('triggers');
+  triggers.forEach((tr) => {
+    const el = document.createElement('div');
+    el.className = 'trigger-card';
+    el.innerHTML = `<div class="tr-t">${tr.t}</div><div class="tr-src">${tr.src}</div>`;
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.trigger-card').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      renderDetail(tr);
+    });
+    tgrid.appendChild(el);
+  });
+  function renderDetail(tr) {
+    const el = document.getElementById('triggerdetail');
+    const laneClass = tr.lane === 'a' ? 'a' : 'b';
+    const laneName = tr.lane === 'a' ? 'WEBINAR LANE' : 'WORKSHOP LANE';
+    el.innerHTML = `
+      <h3>${tr.t}</h3>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">Source: <b>${tr.src}</b> · Owner: <b>${tr.owner}</b> · Slot: <b>${tr.slot}</b></div>
+      <div class="route-flow">
+        <span class="route-node">Hand-raise</span><span class="route-arr">→</span>
+        <span class="route-node">SDR Triage</span><span class="route-arr">→</span>
+        <span class="route-node ${laneClass}">${laneName}</span><span class="route-arr">→</span>
+        <span class="route-node ${laneClass}">${tr.lane === 'a' ? 'Webinar attended' : 'Workshop delivered'}</span><span class="route-arr">→</span>
+        <span class="route-node">Pipeline</span>
+      </div>
+      <div style="font-size:12px;">Re-enters reporting funnel at ${tr.lane === 'a' ? 'S3 (Webinar)' : 'S6 (Workshop)'} with source tag <code>fast_path_${tr.lane.toUpperCase()}</code>.</div>
     `;
   }
-  renderDetail(triggers[0]);
 
-  // Predict sliders
+  // ---------- PREDICT ----------
   const sl = id => document.getElementById(id);
-  const sliders = ['tal','eng','reg','att','ws','fp','pip','deal'];
-  sliders.forEach(k => sl('s-'+k).addEventListener('input', refresh));
+  const fmt = n => Math.round(n).toLocaleString();
   function refresh() {
     const tal = +sl('s-tal').value;
     const eng = +sl('s-eng').value / 100;
     const reg = +sl('s-reg').value / 100;
     const att = +sl('s-att').value / 100;
-    const ws = +sl('s-ws').value / 100;
-    const fp = +sl('s-fp').value;
+    const ws  = +sl('s-ws').value / 100;
+    const fp  = +sl('s-fp').value;
     const pip = +sl('s-pip').value / 100;
-    const deal = +sl('s-deal').value;
+    const val = +sl('s-val').value;
 
-    sl('v-tal').textContent = tal;
-    sl('v-eng').textContent = Math.round(eng*100);
-    sl('v-reg').textContent = Math.round(reg*100);
-    sl('v-att').textContent = Math.round(att*100);
-    sl('v-ws').textContent = Math.round(ws*100);
-    sl('v-fp').textContent = fp;
-    sl('v-pip').textContent = Math.round(pip*100);
-    sl('v-deal').textContent = deal;
+    sl('v-tal').textContent = fmt(tal);
+    sl('v-eng').textContent = (eng*100).toFixed(0) + '%';
+    sl('v-reg').textContent = (reg*100).toFixed(0) + '%';
+    sl('v-att').textContent = (att*100).toFixed(0) + '%';
+    sl('v-ws').textContent  = (ws*100).toFixed(0) + '%';
+    sl('v-fp').textContent  = fp;
+    sl('v-pip').textContent = (pip*100).toFixed(0) + '%';
+    sl('v-val').textContent = '$' + val + 'K';
 
-    const engAccts = Math.round(tal * eng);
-    const regs = Math.round(engAccts * reg);
+    const engd = Math.round(tal * eng);
+    const regs = Math.round(engd * reg);
     const atts = Math.round(regs * att);
     const wsNurt = Math.round(tal * ws);
     const wsTot = wsNurt + fp;
     const pipCnt = Math.round(wsTot * pip);
-    const pipVal = pipCnt * deal;
+    const pipVal = Math.round(pipCnt * val);
 
     const stages = [
-      { n: 'Tier-1 Target Accounts',       v: tal,     w: 100,                fp: false },
-      { n: 'Accounts Engaged (≥1 contact)',v: engAccts,w: (engAccts/tal)*100, fp: false },
+      { n: 'Target Account List',          v: tal,     w: 100,                fp: false },
+      { n: 'Engaged Accounts',             v: engd,    w: (engd/tal)*100,     fp: false },
       { n: 'Webinar Registrations',        v: regs,    w: (regs/tal)*100,     fp: false },
       { n: 'Live Attendance',              v: atts,    w: (atts/tal)*100,     fp: false },
       { n: 'Workshops from Nurture',       v: wsNurt,  w: (wsNurt/tal)*100,   fp: false },
@@ -2085,8 +921,10 @@ Worth a conversation?</div>
       : '$' + pipVal + 'K';
     sl('sum-val').textContent = valFmt;
   }
+  ['s-tal','s-eng','s-reg','s-att','s-ws','s-fp','s-pip','s-val'].forEach(id => {
+    sl(id).addEventListener('input', refresh);
+  });
   refresh();
-
 </script>
 
 </body>
